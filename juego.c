@@ -8,6 +8,7 @@ void crearJuego(tJuego* juego){
     juego->cantJug=0;
     juego->nivelEligido=0;
     juego->tiempoLimite=0;
+
 }
 
 int cargarJuego(tJuego* juego){
@@ -81,7 +82,7 @@ int cargarPreguntas ( t_Lista *lista, const char *urlAPI, size_t nivelDifucultad
     tPregunta pregunta;
     int i, cantElem;
 
-    srand(14);
+    srand(time(NULL));
     if( ! inicializarJsonTxt( &jsonRes )  )
         return 0;//No tengo donde almacenar la respuesta
 
@@ -146,7 +147,6 @@ int iniciarJuego(tJuego *juego){
     size_t i,j;
     tJugador jugadorActual;
     tPregunta preguntaActual;
-    tRespuestaJug resJug;
 
     for( i=0; i < juego->cantJug; i++ )
     {
@@ -157,9 +157,8 @@ int iniciarJuego(tJuego *juego){
             verDatoDeListaEnPos(&juego->listaPreguntas, &preguntaActual, sizeof(tPregunta), j);
             printf("%s\n",preguntaActual.pregunta );
             verOpcionesPreguntas(&preguntaActual);
-            obtenerRespuestaDeTecladoTemporizado(&(resJug.respuesta),&(resJug.tiempo) ,juego->tiempoLimite);
-            printf("Su respuesta es %c y tardo %.4f\n", resJug.respuesta, resJug.tiempo);
-            //insertarEnListaAlFinalConDuplicados( &juego->listaRespuestas, &resJug, sizeof(tRespuestaJug) );//guardamos todas las respuestas
+            obtenerRespuestaDeTecladoTemporizado(&(juego->respuestas[i][j].respuesta),&(juego->respuestas[i][j].tiempo),juego->tiempoLimite);
+            printf("Su respuesta es %c y tardo %.4f\n",juego->respuestas[i][j].respuesta,juego->respuestas[i][j].tiempo);
         }
         system("cls");
     }
@@ -172,4 +171,54 @@ void cerrarJuego(tJuego *juego){
     vaciarLista(&juego->listaMejorRes);
     vaciarLista(&juego->listaPreguntas);
     vaciarLista(&juego->listaRespuestas);
+}
+
+
+
+int calcularResultadosYimprimir(tJuego *juego){
+    //puntajesJugadores
+    tPregunta pre;
+    int i,j,k;
+    int hayDuplicadosMejoresTiempo;
+    int puntajesJugadores[MAX_CANT_JUGADORES];
+    double mejorTiempo;
+
+    ////////////////////aca se calcula los puntajes
+    for(k=0;k<juego->cantJug;k++)
+        puntajesJugadores[k]=0;
+
+    for(i=0;i<juego->cantRondas;i++){
+        determinarMejorTiempoYTiempoDuplicado(juego->respuestas,juego->cantJug,i,
+                                                  &mejorTiempo,&hayDuplicadosMejoresTiempo);
+        verDatoDeListaEnPos( &juego->listaPreguntas, &pre, sizeof( tPregunta ),i);
+        for(j=0;j< juego->cantJug;j++){
+            juego->respuestas[j][i].puntaje=calcularPuntaje(juego->respuestas[j][i].respuesta,pre.opcionCorrecta,juego->respuestas[j][i].tiempo,
+                                                            juego->tiempoLimite,mejorTiempo,hayDuplicadosMejoresTiempo); //i=ronda actual
+            puntajesJugadores[j]+=juego->respuestas[j][i].puntaje;
+        }
+    }
+    system("cls");
+    //////////////////aca se imprimir
+    puts("resultados.");
+    printf("preguntas / jugadores:            ");
+    tJugador jugadorActual;
+    for(j=0;j< juego->cantJug;j++){
+        verDatoDeListaEnPos( &juego->listaJugadores, &jugadorActual, sizeof( tPregunta ),j);
+        printf("%.10s ",jugadorActual.nombre);
+    }
+    puts("");
+
+    for(i=0;i<juego->cantRondas;i++){
+        verDatoDeListaEnPos( &juego->listaPreguntas, &pre, sizeof( tPregunta ),i);
+        printf("%.30s :",pre.pregunta);
+        for(j=0;j< juego->cantJug;j++)
+            printf(" %c:%2d ",juego->respuestas[j][i].respuesta,juego->respuestas[j][i].puntaje);
+        puts("");
+    }
+    printf("puntajes totales: ");
+    for(j=0;j< juego->cantJug;j++)
+        printf("%d   ",puntajesJugadores[j]);
+
+    ///despues se dice quienes son los ganadores a los ganadores
+    return TODO_OK;
 }

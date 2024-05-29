@@ -58,6 +58,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="pregunta.h" />
+		<Unit filename="respuesta.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="respuesta.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />

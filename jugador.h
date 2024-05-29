@@ -9,8 +9,6 @@ typedef struct
 {
     char nombre [MAX_CADENA];
     int orden;
-    char opcionEligida[MAX_TRIVIAS];
-    double tiempoTardado[MAX_TRIVIAS];
 }
 tJugador;
 

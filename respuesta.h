@@ -7,6 +7,9 @@ typedef struct
     double tiempo;
     int puntaje;
 }
-tRespuestaJug;
+tRespuesta;
 
+int determinarMejorTiempoYTiempoDuplicado(tRespuesta respuestas[][100],int cantJugadores, int rondaActual,double* mejorTiempo,int* existenDuplicado);
+int calcularPuntaje(char respuestaJugador,char respuestaCorrecta,double tiempoRespuesta,
+                    int tiempoLimite,double mejorTiempo,int existeDuplicadoMejorTiempo);
 #endif // RESPUESTA_H_INCLUDED

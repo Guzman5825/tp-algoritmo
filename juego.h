@@ -14,6 +14,9 @@
 #include "pregunta.h"
 #include "respuesta.h"
 
+#define MAX_CANT_JUGADORES 100
+#define MAX_CANT_RONDAS 100
+
 typedef struct{
     t_Lista listaPreguntas;
     t_Lista listaJugadores;
@@ -23,6 +26,7 @@ typedef struct{
     int nivelEligido;
     int tiempoLimite;
     int cantRondas;
+    tRespuesta respuestas[MAX_CANT_JUGADORES][MAX_CANT_RONDAS];
 }tJuego;
 
 typedef struct
@@ -32,20 +36,17 @@ typedef struct
 }
 tJsontxt;
 
-
-
 void crearJuego(tJuego *juego);
 int cargarJuego(tJuego *juego);
 int cargarJugadores ( tJuego *lista );
 int cargarPreguntas ( t_Lista *lista, const char *urlAPI, size_t nivelDificultad, size_t cantRaunds );
 
-
-
 void parsearPregunta ( tPregunta *destinoPregun, cJSON *origen );
 
-
 int iniciarJuego(tJuego *juego);
-int calcularResultado();
+
+
+int calcularResultadosYimprimir(tJuego *juego);
 void cerrarJuego(tJuego *juego);
 
 
