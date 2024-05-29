@@ -212,7 +212,8 @@ int calcularResultadosYimprimir(tJuego *juego){
         verDatoDeListaEnPos( &juego->listaPreguntas, &pre, sizeof( tPregunta ),i);
         printf("%.30s :",pre.pregunta);
         for(j=0;j< juego->cantJug;j++)
-            printf(" %c:%2d ",juego->respuestas[j][i].respuesta,juego->respuestas[j][i].puntaje);
+            printf(" %c:%2.1f:%2d   ",juego->respuestas[j][i].respuesta,
+                   juego->respuestas[j][i].tiempo,juego->respuestas[j][i].puntaje);
         puts("");
     }
     printf("puntajes totales: ");

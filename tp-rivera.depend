@@ -91,7 +91,7 @@
 	<time.h>
 	<unistd.h>
 
-1716999478 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.c
+1717001039 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.c
 	"juego.h"
 
 1716997409 c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.h
@@ -129,12 +129,12 @@
 1716909674 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\lista_simple.c
 	"lista_simple.h"
 
-1716997409 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\main.c
+1717000147 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\main.c
 	"juego.h"
 
 1716943720 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\pregunta.c
 	"pregunta.h"
 
-1716997896 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\respuesta.c
+1717000931 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\respuesta.c
 	"respuesta.h"
 

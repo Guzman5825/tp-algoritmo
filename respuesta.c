@@ -22,7 +22,7 @@ int calcularPuntaje(char respuestaJugador,char respuestaCorrecta,double tiempoRe
         return 0;
     if(respuestaJugador!=respuestaCorrecta)
         return -2;
-    if(tiempoRespuesta<mejorTiempo)
+    if(tiempoRespuesta>mejorTiempo)
         return 1;
     if(existeDuplicadoMejorTiempo)
         return 2;
