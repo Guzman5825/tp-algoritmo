@@ -1,0 +1,69 @@
+# depslib dependency file v1.0
+1716950933 source:c:\users\usuario\desktop\tp-program\tp-rivera\main.c
+	"juego.h"
+
+1716909693 c:\users\usuario\desktop\tp-program\tp-rivera\lista_simple.h
+	<string.h>
+	<stdlib.h>
+	<stddef.h>
+
+1716041234 c:\users\usuario\desktop\tp-program\tp-rivera\cjson.h
+	<stddef.h>
+
+1716041223 source:c:\users\usuario\desktop\tp-program\tp-rivera\cjson.c
+	<string.h>
+	<stdio.h>
+	<math.h>
+	<stdlib.h>
+	<limits.h>
+	<ctype.h>
+	<float.h>
+	<locale.h>
+	"cJSON.h"
+
+1716909674 source:c:\users\usuario\desktop\tp-program\tp-rivera\lista_simple.c
+	"lista_simple.h"
+
+1716943408 source:c:\users\usuario\desktop\tp-program\tp-rivera\input.c
+	"input.h"
+
+1716299656 c:\users\usuario\desktop\tp-program\tp-rivera\input.h
+	<stdio.h>
+	<ctype.h>
+	<conio.h>
+	<time.h>
+	<unistd.h>
+
+1716948434 source:c:\users\usuario\desktop\tp-program\tp-rivera\juego.c
+	"juego.h"
+
+1716992138 c:\users\usuario\desktop\tp-program\tp-rivera\juego.h
+	<stdio.h>
+	"lista_simple.h"
+	<curl/curl.h>
+	"cJSON.h"
+	<windows.h>
+	<process.h>
+	<time.h>
+	<conio.h>
+	"input.h"
+	"jugador.h"
+	"pregunta.h"
+	"respuesta.h"
+
+1716951624 c:\users\usuario\desktop\tp-program\tp-rivera\jugador.h
+	<stdio.h>
+
+1716943737 c:\users\usuario\desktop\tp-program\tp-rivera\pregunta.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1716927253 source:c:\users\usuario\desktop\tp-program\tp-rivera\jugador.c
+	"jugador.h"
+
+1716943720 source:c:\users\usuario\desktop\tp-program\tp-rivera\pregunta.c
+	"pregunta.h"
+
+1716992138 c:\users\usuario\desktop\tp-program\tp-rivera\respuesta.h
+
