@@ -91,10 +91,10 @@
 	<time.h>
 	<unistd.h>
 
-1717178906 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.c
+1717179551 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.c
 	"juego.h"
 
-1717178589 c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.h
+1717179551 c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.h
 	<stdio.h>
 	"lista_simple.h"
 	<curl/curl.h>
@@ -121,12 +121,12 @@
 	<stdlib.h>
 	<string.h>
 
-1717178589 c:\users\usuario\desktop\tp-program\tp-algoritmo\respuesta.h
+1717179566 c:\users\usuario\desktop\tp-program\tp-algoritmo\respuesta.h
 
 1717178589 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\jugador.c
 	"jugador.h"
 
-1717178940 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\lista_simple.c
+1717179055 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\lista_simple.c
 	"lista_simple.h"
 
 1717102147 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\main.c
@@ -135,6 +135,6 @@
 1717162074 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\pregunta.c
 	"pregunta.h"
 
-1717178589 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\respuesta.c
+1717179269 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\respuesta.c
 	"respuesta.h"
 
