@@ -18,6 +18,7 @@ typedef t_Nodo* t_Lista;
 typedef int(*Comparacion)(const void*,const void* );//politica (elemNodo, elemExterno)
 typedef int(*Accion)( const void*, void* );
 typedef int(*Accion2)( void*, void* );
+typedef int(*Accion3)( const void*,const void* );
 
 void crearLista ( t_Lista *lista );
 
@@ -31,7 +32,7 @@ int insertarEnListaAlFinalConDuplicados ( t_Lista *lista, const void *elem, size
 int insertarEnListaOrdenadoConDuplicado ( t_Lista *lista, const void *elem, size_t tamElem, Comparacion cmp );
 
 int insertarEnListaAlPrincipioSinDuplicados ( t_Lista *lista, const void *elem, size_t tamElem, Comparacion cmp, void *datosAccion, Accion acc );
-int insertarEnListaAlFinalSinDuplicados ( t_Lista *lista, const void *elem, size_t tamElem, Comparacion cmp, Accion acc );
+int insertarEnListaAlFinalSinDuplicados ( t_Lista *lista, const void *elem, size_t tamElem, Comparacion cmp, Accion3 acc );
 int insertarEnListaOrdenadoSinDuplicados ( t_Lista *lista, const void *elem, size_t tamElem, Comparacion cmp, void *datosAccion, Accion acc );
 
 int insertarEnListaEnPos ( t_Lista *lista, const void *elem, size_t tamElem, size_t posAInsert );

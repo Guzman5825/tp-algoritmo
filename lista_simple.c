@@ -162,7 +162,7 @@ int insertarEnListaAlPrincipioSinDuplicados ( t_Lista *lista, const void *elem, 
     return 1;
 }
 
-int insertarEnListaAlFinalSinDuplicados ( t_Lista *lista, const void *elem, size_t tamElem, Comparacion cmp, Accion acc )
+int insertarEnListaAlFinalSinDuplicados ( t_Lista *lista, const void *elem, size_t tamElem, Comparacion cmp, Accion3 acc )
 {
     t_Nodo *nuevoElem;
 
