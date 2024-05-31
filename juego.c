@@ -8,7 +8,7 @@ void crearJuego(tJuego* juego){
     juego->cantJug=0;
     juego->nivelEligido=0;
     juego->tiempoLimite=0;
-
+    srand(time(NULL));
 }
 
 int cargarJuego(tJuego* juego){
@@ -19,7 +19,8 @@ int cargarJuego(tJuego* juego){
     cargarJugadores(juego);
     puts("cargando preguntas...");
 
-    cargarPreguntas( &juego->listaPreguntas, "https://664d06f4ede9a2b5565273e6.mockapi.io/PREGUNTAS", juego->nivelEligido, juego->cantRondas );
+    cargarPreguntas( &juego->listaPreguntas, "https://664d06f4ede9a2b5565273e6.mockapi.io/PREGUNTAS",
+                     juego->nivelEligido, juego->cantRondas );
 
     return 0;
 }
@@ -27,8 +28,6 @@ int cargarJuego(tJuego* juego){
 int cargarJugadores ( tJuego *juego )
 {
     tJugador jugador;
-    srand(200);
-
     puts("Ingrese el nombre de un jugador o FIN si ya ingreso todos los nombres!!!!");
     fflush(stdin);
     gets(jugador.nombre);// se podria usar el fgets pero debemos eliminar el \n del final
@@ -42,6 +41,10 @@ int cargarJugadores ( tJuego *juego )
         fflush(stdin);
         gets( jugador.nombre );
     }
+
+    int orden=1;
+    mapLista(&juego->listaJugadores,ModificarElOrdenJugador,&orden);
+
     return TODO_OK;
 }
 
@@ -52,7 +55,6 @@ static size_t write_callback(void *respuesta, size_t tamDatos, size_t cantDatos,
     datosUsuario->cadenaJSON = realloc( datosUsuario->cadenaJSON, datosUsuario->tamCadena + tamNuevo + 1 );
     if( ! datosUsuario->cadenaJSON )
         return 0; //no puedo agrandar la cadena
-
 
     memcpy( datosUsuario->cadenaJSON + datosUsuario->tamCadena, respuesta, tamNuevo );
     datosUsuario->tamCadena += tamNuevo;
@@ -82,7 +84,7 @@ int cargarPreguntas ( t_Lista *lista, const char *urlAPI, size_t nivelDifucultad
     tPregunta pregunta;
     int i, cantElem;
 
-    srand(time(NULL));
+
     if( ! inicializarJsonTxt( &jsonRes )  )
         return 0;//No tengo donde almacenar la respuesta
 
@@ -104,26 +106,28 @@ int cargarPreguntas ( t_Lista *lista, const char *urlAPI, size_t nivelDifucultad
     }
 
     jsonPreguntas = cJSON_Parse(jsonRes.cadenaJSON);
-
     for( i=0; i < cJSON_GetArraySize(jsonPreguntas); i++ )
     {
         parsearPregunta( &pregunta, cJSON_GetArrayItem( jsonPreguntas, i ) );
-        aleatorizarRespuestaCorrecta( &pregunta );
-        insertarEnListaAlFinalConDuplicados( lista, &pregunta, sizeof(tPregunta) );
+        if(pregunta.dificultad==nivelDifucultad){
+            pregunta.orden=rand();
+            aleatorizarRespuestaCorrecta( &pregunta );
+            insertarEnListaOrdenadoConDuplicado( lista, &pregunta, sizeof(tPregunta),cmpOrdenPregunta);
+        }
     }
 
     cJSON_Delete( jsonPreguntas );//liberamos el cjson, tiene una implementacion con memoria dinamica
     curl_easy_cleanup( curl ); //terminamos la solicitud
 
-    cantElem = lista_Filter( lista, filtraXDificultad, &nivelDifucultad );
+    cantElem = lista_Filter(lista, filtraXDificultad, &nivelDifucultad);    //esto hay que cambiar ya que esta filtrdo
     while( cantElem > cantRaunds )
     {
         eliminarDeListaEnPos( lista, (rand()+95) % cantElem );//elimino cualquiera hasta tener la cantidad correcta
         cantElem--;
     }
-
+    int orden=1;
+    mapLista(lista,ModificarElOrdenPregunta,&orden);
     return 1;
-
 }
 
 void parsearPregunta ( tPregunta *destinoPregun, cJSON *origen )
@@ -142,6 +146,16 @@ void parsearPregunta ( tPregunta *destinoPregun, cJSON *origen )
     valor = cJSON_GetObjectItem( origen, "nivel" );
     destinoPregun->dificultad = valor->valueint;
 }
+/*
+int contestarPreguntas(const void* d, void* d2){
+    const tPregunta *pregunta=d;
+    tRespuesta *respuesta=d2;
+
+    obtenerRespuestaDeTecladoTemporizado(&(juego->respuestas[i][j].respuesta),
+                                                 &(juego->respuestas[i][j].tiempo),juego->tiempoLimite);
+
+    return 1;
+}*/
 
 int iniciarJuego(tJuego *juego){
     size_t i,j;
@@ -155,9 +169,11 @@ int iniciarJuego(tJuego *juego){
         for( j=0; j < juego->cantRondas; j++ )
         {
             verDatoDeListaEnPos(&juego->listaPreguntas, &preguntaActual, sizeof(tPregunta), j);
-            printf("%s\n",preguntaActual.pregunta );
+            printf("%s\n",preguntaActual.pregunta);
             verOpcionesPreguntas(&preguntaActual);
-            obtenerRespuestaDeTecladoTemporizado(&(juego->respuestas[i][j].respuesta),&(juego->respuestas[i][j].tiempo),juego->tiempoLimite);
+
+            obtenerRespuestaDeTecladoTemporizado(&(juego->respuestas[i][j].respuesta),
+                                                 &(juego->respuestas[i][j].tiempo),juego->tiempoLimite);
             printf("Su respuesta es %c y tardo %.4f\n",juego->respuestas[i][j].respuesta,juego->respuestas[i][j].tiempo);
         }
         system("cls");

@@ -4,11 +4,8 @@ int main()
     tJuego juego;
     crearJuego(&juego);
     cargarJuego(&juego);
-
     iniciarJuego(&juego);
-
     calcularResultadosYimprimir(&juego);
-
     cerrarJuego(&juego);
     //la idea es tener una lista de tiempos menores de cada raund, para luego sacar el puntaje con los
     //parametros que dice el tp de de si son 3 o 2 o 1 puntos, como debemos informar lo que respondio

@@ -45,7 +45,6 @@ void parsearPregunta ( tPregunta *destinoPregun, cJSON *origen );
 
 int iniciarJuego(tJuego *juego);
 
-
 int calcularResultadosYimprimir(tJuego *juego);
 void cerrarJuego(tJuego *juego);
 

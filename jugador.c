@@ -22,3 +22,11 @@ int cmpJugadorXOrdenMayAMen ( const void* j1, const void *j2 )
 
     return  nuevoJ->orden - jExistente->orden;
 }
+
+int ModificarElOrdenJugador( void* n, void* d){
+    tJugador *jugador=n;
+    int* orden=d;
+    jugador->orden=*orden;
+    (*orden)++;
+    return 1;
+}

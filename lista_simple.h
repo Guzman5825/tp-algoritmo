@@ -17,13 +17,14 @@ typedef t_Nodo* t_Lista;
 
 typedef int(*Comparacion)(const void*,const void* );//politica (elemNodo, elemExterno)
 typedef int(*Accion)( const void*, void* );
-
+typedef int(*Accion2)( void*, void* );
 
 void crearLista ( t_Lista *lista );
 
 int listaVacia ( t_Lista *lista );
 void vaciarLista ( t_Lista *lista );
 void recorrerLista (t_Lista *lista, Accion acc, void *datoAccion  );
+void mapLista(t_Lista *lista, Accion2 acc, void *datoAccion  );
 
 int insertarEnListaAlPrincipioConDuplicados ( t_Lista *lista, const void *elem, size_t tamElem );
 int insertarEnListaAlFinalConDuplicados ( t_Lista *lista, const void *elem, size_t tamElem );

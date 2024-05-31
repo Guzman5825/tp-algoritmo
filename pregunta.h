@@ -14,10 +14,13 @@ typedef struct
     size_t dificultad;
     char opciones[MAX_OPCIONES][ MAX_CARACTERES_OPCIONES ];
     char opcionCorrecta;
+    int orden;
 }
 tPregunta;
 
 void verOpcionesPreguntas ( tPregunta *pre );
 int filtraXDificultad ( const void *dato1, const void *dato2 );
 void aleatorizarRespuestaCorrecta ( tPregunta *pre );
+int cmpOrdenPregunta( const void* p1, const void *p2 );
+int ModificarElOrdenPregunta(void* n, void* d);
 #endif // PREGUNTA_H_INCLUDED

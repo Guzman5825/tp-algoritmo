@@ -35,6 +35,15 @@ void recorrerLista (t_Lista *lista, Accion acc, void *datoAccion  )
     }
 }
 
+void mapLista(t_Lista *lista, Accion2 acc, void *datoAccion  )
+{
+    while ( * lista )
+    {
+        acc( (*lista)->dato, datoAccion );
+        lista = & (*lista)->siguiente;
+    }
+}
+
 int insertarEnListaAlPrincipioConDuplicados ( t_Lista *lista, const void *elem, size_t tamElem )
 {
     t_Nodo *nuevoElem;
