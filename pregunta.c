@@ -1,6 +1,6 @@
 #include "pregunta.h"
 
-void verOpcionesPreguntas ( tPregunta *pre )
+void verOpcionesPreguntas (const tPregunta *pre )
 {
     size_t i;
 

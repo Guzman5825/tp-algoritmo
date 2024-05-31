@@ -20,13 +20,13 @@
 typedef struct{
     t_Lista listaPreguntas;
     t_Lista listaJugadores;
-    t_Lista listaRespuestas; //almacenamos los datos de cada partida correspondiente
     t_Lista listaMejorRes;
     size_t cantJug;
     int nivelEligido;
     int tiempoLimite;
     int cantRondas;
     tRespuesta respuestas[MAX_CANT_JUGADORES][MAX_CANT_RONDAS];
+    int jugadorActual,rondaActual;
 }tJuego;
 
 typedef struct

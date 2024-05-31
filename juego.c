@@ -3,7 +3,6 @@
 void crearJuego(tJuego* juego){
     crearLista( &juego->listaPreguntas );
     crearLista(&juego->listaJugadores);
-    crearLista( &juego->listaRespuestas );
     crearLista( &juego->listaMejorRes );
     juego->cantJug=0;
     juego->nivelEligido=0;
@@ -13,7 +12,7 @@ void crearJuego(tJuego* juego){
 
 int cargarJuego(tJuego* juego){
     juego->tiempoLimite=10; ///luego pedir por config.txt
-    juego->cantRondas=4;    ///luego pedir por config.txt
+    juego->cantRondas=3;    ///luego pedir por config.txt
     juego->nivelEligido=1;  ///esto se debe pedir aparte
 
     cargarJugadores(juego);
@@ -42,7 +41,7 @@ int cargarJugadores ( tJuego *juego )
         gets( jugador.nombre );
     }
 
-    int orden=1;
+    int orden=0;
     mapLista(&juego->listaJugadores,ModificarElOrdenJugador,&orden);
 
     return TODO_OK;
@@ -125,7 +124,7 @@ int cargarPreguntas ( t_Lista *lista, const char *urlAPI, size_t nivelDifucultad
         eliminarDeListaEnPos( lista, (rand()+95) % cantElem );//elimino cualquiera hasta tener la cantidad correcta
         cantElem--;
     }
-    int orden=1;
+    int orden=0;
     mapLista(lista,ModificarElOrdenPregunta,&orden);
     return 1;
 }
@@ -146,49 +145,46 @@ void parsearPregunta ( tPregunta *destinoPregun, cJSON *origen )
     valor = cJSON_GetObjectItem( origen, "nivel" );
     destinoPregun->dificultad = valor->valueint;
 }
-/*
-int contestarPreguntas(const void* d, void* d2){
-    const tPregunta *pregunta=d;
-    tRespuesta *respuesta=d2;
 
-    obtenerRespuestaDeTecladoTemporizado(&(juego->respuestas[i][j].respuesta),
-                                                 &(juego->respuestas[i][j].tiempo),juego->tiempoLimite);
+int contestarPregunta(const void* d, void* d2){
+    const tPregunta *pregunta=d;
+    tJuego *juego=d2;
+
+    printf("%s\n",pregunta->pregunta);
+    verOpcionesPreguntas(pregunta);
+    obtenerRespuestaDeTecladoTemporizado(&(juego->respuestas[juego->jugadorActual][juego->rondaActual].respuesta),
+                                         &(juego->respuestas[juego->jugadorActual][juego->rondaActual].tiempo),
+                                         juego->tiempoLimite);
+    printf("Su respuesta es %c y tardo %.4f\n",juego->respuestas[juego->jugadorActual][juego->rondaActual].respuesta,
+           juego->respuestas[juego->jugadorActual][juego->rondaActual].tiempo);
+
+
+    juego->rondaActual++;
 
     return 1;
-}*/
+}
+
+int juegaJugador(const void* d, void* d2){
+    const tJugador *jugador=d;
+    tJuego *juego=d2;
+
+    printf("Turno del jugador: %s\n", jugador->nombre);
+    juego->rondaActual=0;
+    recorrerLista(&juego->listaPreguntas,contestarPregunta,juego);
+
+    system("cls");
+
+    juego->jugadorActual++;
+    return 1;
+}
 
 int iniciarJuego(tJuego *juego){
-    size_t i,j;
-    tJugador jugadorActual;
-    tPregunta preguntaActual;
 
-    for( i=0; i < juego->cantJug; i++ )
-    {
-        verDatoDeListaEnPos(&juego->listaJugadores, &jugadorActual, sizeof(tJugador), i);
-        printf("Turno del jugador: %s\n", jugadorActual.nombre);
-        for( j=0; j < juego->cantRondas; j++ )
-        {
-            verDatoDeListaEnPos(&juego->listaPreguntas, &preguntaActual, sizeof(tPregunta), j);
-            printf("%s\n",preguntaActual.pregunta);
-            verOpcionesPreguntas(&preguntaActual);
+    juego->jugadorActual=0;
+    recorrerLista(&juego->listaJugadores,juegaJugador,juego);
 
-            obtenerRespuestaDeTecladoTemporizado(&(juego->respuestas[i][j].respuesta),
-                                                 &(juego->respuestas[i][j].tiempo),juego->tiempoLimite);
-            printf("Su respuesta es %c y tardo %.4f\n",juego->respuestas[i][j].respuesta,juego->respuestas[i][j].tiempo);
-        }
-        system("cls");
-    }
     return TODO_OK;
 }
-
-
-void cerrarJuego(tJuego *juego){
-    vaciarLista(&juego->listaJugadores);
-    vaciarLista(&juego->listaMejorRes);
-    vaciarLista(&juego->listaPreguntas);
-    vaciarLista(&juego->listaRespuestas);
-}
-
 
 
 int calcularResultadosYimprimir(tJuego *juego){
@@ -238,4 +234,10 @@ int calcularResultadosYimprimir(tJuego *juego){
 
     ///despues se dice quienes son los ganadores a los ganadores
     return TODO_OK;
+}
+
+void cerrarJuego(tJuego *juego){
+    vaciarLista(&juego->listaJugadores);
+    vaciarLista(&juego->listaMejorRes);
+    vaciarLista(&juego->listaPreguntas);
 }

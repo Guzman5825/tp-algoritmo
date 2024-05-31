@@ -18,7 +18,7 @@ typedef struct
 }
 tPregunta;
 
-void verOpcionesPreguntas ( tPregunta *pre );
+void verOpcionesPreguntas (const tPregunta *pre );
 int filtraXDificultad ( const void *dato1, const void *dato2 );
 void aleatorizarRespuestaCorrecta ( tPregunta *pre );
 int cmpOrdenPregunta( const void* p1, const void *p2 );
