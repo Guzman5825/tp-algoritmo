@@ -33,7 +33,7 @@ int insertarEnListaOrdenadoConDuplicado ( t_Lista *lista, const void *elem, size
 
 int insertarEnListaAlPrincipioSinDuplicados ( t_Lista *lista, const void *elem, size_t tamElem, Comparacion cmp, void *datosAccion, Accion acc );
 int insertarEnListaAlFinalSinDuplicados ( t_Lista *lista, const void *elem, size_t tamElem, Comparacion cmp, Accion3 acc );
-int insertarEnListaOrdenadoSinDuplicados ( t_Lista *lista, const void *elem, size_t tamElem, Comparacion cmp, void *datosAccion, Accion acc );
+int insertarEnListaOrdenadoSinDuplicados ( t_Lista *lista, const void *elem, size_t tamElem, Comparacion cmp, void *datosAccion, Accion2 acc );
 
 int insertarEnListaEnPos ( t_Lista *lista, const void *elem, size_t tamElem, size_t posAInsert );
 

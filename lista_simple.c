@@ -200,7 +200,8 @@ int insertarEnListaAlFinalSinDuplicados ( t_Lista *lista, const void *elem, size
     return 1;
 }
 
-int insertarEnListaOrdenadoSinDuplicados ( t_Lista *lista, const void *elem, size_t tamElem, Comparacion cmp, void *datosAccion, Accion acc )
+int insertarEnListaOrdenadoSinDuplicados ( t_Lista *lista, const void *elem, size_t tamElem,
+                                           Comparacion cmp, void *datosAccion, Accion2 acc )
 {
     t_Nodo *nuevoElem;
     int resulCmp = -1;

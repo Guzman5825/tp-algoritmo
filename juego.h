@@ -26,7 +26,7 @@ typedef struct{
     int tiempoLimite;
     int cantRondas;
     tRespuesta respuestas[MAX_CANT_JUGADORES][MAX_CANT_RONDAS];
-    int jugadorActual,rondaActual;
+    int jugadorActual;
 }tJuego;
 
 typedef struct
@@ -35,6 +35,17 @@ typedef struct
     size_t tamCadena;
 }
 tJsontxt;
+
+typedef struct
+{
+    int maximaPuntuacion;
+    int tiempoLimite;
+    int mejorTiempo;
+    int existeTiempoMejorDuplicado;
+    char respuestaCorrecta;
+    t_Lista jugadores;
+}
+tContexto;
 
 void crearJuego(tJuego *juego);
 int cargarJuego(tJuego *juego);

@@ -12,7 +12,7 @@ void crearJuego(tJuego* juego){
 
 int cargarJuego(tJuego* juego){
     juego->tiempoLimite=10; ///luego pedir por config.txt
-    juego->cantRondas=3;    ///luego pedir por config.txt
+    juego->cantRondas=2;    ///luego pedir por config.txt
     juego->nivelEligido=1;  ///esto se debe pedir aparte
 
     cargarJugadores(juego);
@@ -27,6 +27,7 @@ int cargarJuego(tJuego* juego){
 int cargarJugadores ( tJuego *juego )
 {
     tJugador jugador;
+
     puts("Ingrese el nombre de un jugador o FIN si ya ingreso todos los nombres!!!!");
     fflush(stdin);
     gets(jugador.nombre);// se podria usar el fgets pero debemos eliminar el \n del final
@@ -34,6 +35,7 @@ int cargarJugadores ( tJuego *juego )
     while( strcmpi( "FIN", jugador.nombre ) != 0 )
     {
         jugador.orden = rand();//se podria tambien con un map asignarle un orden y luego ordenar la lista por el orden
+        jugador.puntajeTotal=0;
         insertarEnListaOrdenadoConDuplicado( &juego->listaJugadores, &jugador, sizeof( tJugador ),cmpJugadorXOrdenMenAMay );
         juego->cantJug++;
         puts("Ingrese el nombre de un jugador");
@@ -73,7 +75,6 @@ int inicializarJsonTxt ( tJsontxt *soli )
     return 1;
 }
 
-
 int cargarPreguntas ( t_Lista *lista, const char *urlAPI, size_t nivelDifucultad, size_t cantRaunds )
 {
     CURL *curl;
@@ -82,6 +83,7 @@ int cargarPreguntas ( t_Lista *lista, const char *urlAPI, size_t nivelDifucultad
     tJsontxt jsonRes;
     tPregunta pregunta;
     int i, cantElem;
+
 
 
     if( ! inicializarJsonTxt( &jsonRes )  )
@@ -111,6 +113,7 @@ int cargarPreguntas ( t_Lista *lista, const char *urlAPI, size_t nivelDifucultad
         if(pregunta.dificultad==nivelDifucultad){
             pregunta.orden=rand();
             aleatorizarRespuestaCorrecta( &pregunta );
+            crearLista(&(pregunta.respuestas)); //dado que siempre se usara esto para crear la listas de preguntas
             insertarEnListaOrdenadoConDuplicado( lista, &pregunta, sizeof(tPregunta),cmpOrdenPregunta);
         }
     }
@@ -146,32 +149,34 @@ void parsearPregunta ( tPregunta *destinoPregun, cJSON *origen )
     destinoPregun->dificultad = valor->valueint;
 }
 
-int contestarPregunta(const void* d, void* d2){
-    const tPregunta *pregunta=d;
+int contestarPregunta(void* d, void* d2){
+    tPregunta *pregunta=d;
     tJuego *juego=d2;
+    double tiempoTranscurrido;
+    tRespuesta respuesta;
 
+    respuesta.ordenJugador=juego->jugadorActual;    ///aca guardamos el orden
     printf("%s\n",pregunta->pregunta);
     verOpcionesPreguntas(pregunta);
-    obtenerRespuestaDeTecladoTemporizado(&(juego->respuestas[juego->jugadorActual][juego->rondaActual].respuesta),
-                                         &(juego->respuestas[juego->jugadorActual][juego->rondaActual].tiempo),
-                                         juego->tiempoLimite);
-    printf("Su respuesta es %c y tardo %.4f\n",juego->respuestas[juego->jugadorActual][juego->rondaActual].respuesta,
-           juego->respuestas[juego->jugadorActual][juego->rondaActual].tiempo);
+    obtenerRespuestaDeTecladoTemporizado(&(respuesta.respuesta),&tiempoTranscurrido,juego->tiempoLimite);
+    respuesta.tiempo=(int)tiempoTranscurrido; //solo se queda con la parte ententera del double
 
+    printf("Su respuesta es %c y tardo %2d segundos \n",respuesta.respuesta,respuesta.tiempo);
 
-    juego->rondaActual++;
+    insertarEnListaAlFinalConDuplicados(&pregunta->respuestas,&respuesta,sizeof(respuesta));
 
     return 1;
 }
 
-int juegaJugador(const void* d, void* d2){
-    const tJugador *jugador=d;
+int juegaJugador(void* d, void* d2){
+    tJugador *jugador=d;
     tJuego *juego=d2;
 
     printf("Turno del jugador: %s\n", jugador->nombre);
-    juego->rondaActual=0;
-    recorrerLista(&juego->listaPreguntas,contestarPregunta,juego);
+    mapLista(&juego->listaPreguntas,contestarPregunta,juego);
 
+    puts("turno terminado,ingrese nueva tecla para continuar");
+    getchar();
     system("cls");
 
     juego->jugadorActual++;
@@ -181,58 +186,71 @@ int juegaJugador(const void* d, void* d2){
 int iniciarJuego(tJuego *juego){
 
     juego->jugadorActual=0;
-    recorrerLista(&juego->listaJugadores,juegaJugador,juego);
+    mapLista(&juego->listaJugadores,juegaJugador,juego);
 
     return TODO_OK;
 }
+/**-------------------------------------------------------------------*/
+//lista de respuestas
+int calcularPuntajeDeRespuesta(void* d, void* d2){
+    tRespuesta* respuesta =d;
+    tContexto * c =d2;
+    respuesta->puntaje=calcularPuntaje(respuesta->respuesta,c->respuestaCorrecta,respuesta->tiempo,
+                                     c->tiempoLimite,c->mejorTiempo,c->existeTiempoMejorDuplicado);
+    ///aca cambiarlo por una lista circular o lista circular doble
 
+    tJugador j;
+    j.orden=respuesta->ordenJugador;
+    insertarEnListaOrdenadoSinDuplicados(&c->jugadores,&j,sizeof(tJugador),
+                                         cmpJugadorXOrdenMenAMay,&respuesta->puntaje,sumarPuntos);
+    return 1;
+}
 
-int calcularResultadosYimprimir(tJuego *juego){
-    //puntajesJugadores
-    tPregunta pre;
-    int i,j,k;
-    int hayDuplicadosMejoresTiempo;
-    int puntajesJugadores[MAX_CANT_JUGADORES];
-    double mejorTiempo;
-
-    ////////////////////aca se calcula los puntajes
-    for(k=0;k<juego->cantJug;k++)
-        puntajesJugadores[k]=0;
-
-    for(i=0;i<juego->cantRondas;i++){
-        determinarMejorTiempoYTiempoDuplicado(juego->respuestas,juego->cantJug,i,
-                                                  &mejorTiempo,&hayDuplicadosMejoresTiempo);
-        verDatoDeListaEnPos( &juego->listaPreguntas, &pre, sizeof( tPregunta ),i);
-        for(j=0;j< juego->cantJug;j++){
-            juego->respuestas[j][i].puntaje=calcularPuntaje(juego->respuestas[j][i].respuesta,pre.opcionCorrecta,juego->respuestas[j][i].tiempo,
-                                                            juego->tiempoLimite,mejorTiempo,hayDuplicadosMejoresTiempo); //i=ronda actual
-            puntajesJugadores[j]+=juego->respuestas[j][i].puntaje;
+int mejorTiempoValido(void* d, void* d2){
+    tRespuesta* respuesta =d;
+    tContexto *c =d2;
+    if(respuesta->respuesta==c->respuestaCorrecta){ ///solo tomamos los tiempos y duplicados de aquella respuestas validas
+        if(respuesta->tiempo<c->mejorTiempo){
+        c->mejorTiempo=respuesta->tiempo;
+        c->existeTiempoMejorDuplicado=0;
+        }else{
+        if(respuesta->tiempo==c->mejorTiempo)
+            c->existeTiempoMejorDuplicado=1;
         }
     }
+
+    return 1;
+}
+
+int calcularPuntajesDeRondas(void* d, void* d2){
+    tPregunta* pregunta =d;
+    tContexto* c=d2;
+    c->respuestaCorrecta=pregunta->opcionCorrecta;
+    c->mejorTiempo=100000;
+
+    mapLista(&pregunta->respuestas,mejorTiempoValido,c);
+    mapLista(&pregunta->respuestas,calcularPuntajeDeRespuesta,c);
+
+    return 1;
+}
+
+int calcularResultadosYimprimir(tJuego *juego){
+    tContexto c;
+    c.jugadores=juego->listaJugadores;
+    c.tiempoLimite=juego->tiempoLimite;
+
+    mapLista(&juego->listaPreguntas,calcularPuntajesDeRondas,&c);
     system("cls");
-    //////////////////aca se imprimir
+
     puts("resultados.");
-    printf("preguntas / jugadores:            ");
-    tJugador jugadorActual;
-    for(j=0;j< juego->cantJug;j++){
-        verDatoDeListaEnPos( &juego->listaJugadores, &jugadorActual, sizeof( tPregunta ),j);
-        printf("%.10s ",jugadorActual.nombre);
-    }
+    printf("preguntas / jugadores:                   ");
+    mapLista(&juego->listaJugadores,imprimirJugador,stdout);
     puts("");
+    mapLista(&juego->listaPreguntas,mostrarPreguntaYimprimirRespuesta,NULL);
 
-    for(i=0;i<juego->cantRondas;i++){
-        verDatoDeListaEnPos( &juego->listaPreguntas, &pre, sizeof( tPregunta ),i);
-        printf("%.30s :",pre.pregunta);
-        for(j=0;j< juego->cantJug;j++)
-            printf(" %c:%2.1f:%2d   ",juego->respuestas[j][i].respuesta,
-                   juego->respuestas[j][i].tiempo,juego->respuestas[j][i].puntaje);
-        puts("");
-    }
-    printf("puntajes totales: ");
-    for(j=0;j< juego->cantJug;j++)
-        printf("%d   ",puntajesJugadores[j]);
+    printf("puntajes totales:                        ");   ///puntajes totales ,despues lo veo
+    mapLista(&juego->listaJugadores,imprimirPuntajeTotalJugador,stdout);
 
-    ///despues se dice quienes son los ganadores a los ganadores
     return TODO_OK;
 }
 

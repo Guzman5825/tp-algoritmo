@@ -1,23 +1,14 @@
 #include "respuesta.h"
 
-
-int determinarMejorTiempoYTiempoDuplicado(tRespuesta respuestas[][100],int cantJugadores,
-                                        int rondaActual,double* mejorTiempo,int* existenDuplicado){
-    *mejorTiempo=100000.0;
-    *existenDuplicado=0;
-    for(int i=0;i<cantJugadores;i++){
-        if( respuestas[i][rondaActual].tiempo<*mejorTiempo){
-            *mejorTiempo=respuestas[i][rondaActual].tiempo;
-            *existenDuplicado=0;
-        }else
-            if( respuestas[i][rondaActual].tiempo==*mejorTiempo)
-                *existenDuplicado=1;
-    }
+int mostrarRespuesta(void* d, void* d2){
+    tRespuesta * r=d;
+    printf("'%c' %2ds %2d   ",r->respuesta,r->tiempo,r->puntaje);
     return 1;
 }
 
-int calcularPuntaje(char respuestaJugador,char respuestaCorrecta,double tiempoRespuesta,
-                    int tiempoLimite,double mejorTiempo,int existeDuplicadoMejorTiempo){
+
+int calcularPuntaje(char respuestaJugador,char respuestaCorrecta,int tiempoRespuesta,
+                    int tiempoLimite,int mejorTiempo,int existeDuplicadoMejorTiempo){
     if(tiempoRespuesta>=tiempoLimite)
         return 0;
     if(respuestaJugador!=respuestaCorrecta)

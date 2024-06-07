@@ -30,3 +30,27 @@ int ModificarElOrdenJugador( void* n, void* d){
     (*orden)++;
     return 1;
 }
+
+int imprimirJugador ( void* dato, void *stream )
+{
+    tJugador *jugador = (tJugador*)dato;
+    fprintf((FILE*)stream,"%-10.10s   ", jugador->nombre);
+    return 1;
+}
+
+int imprimirPuntajeTotalJugador ( void* dato, void *stream )
+{
+    tJugador *jugador = (tJugador*)dato;
+    fprintf((FILE*)stream,"%10d   ", jugador->puntajeTotal);
+    return 1;
+}
+
+int sumarPuntos( void* d,void* d2){
+    tJugador * j = (tJugador*)d;
+    int *n=d2;
+    j->puntajeTotal+=*n;
+    return 1;
+}
+
+
+

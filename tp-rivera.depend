@@ -91,10 +91,10 @@
 	<time.h>
 	<unistd.h>
 
-1717183043 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.c
+1717790463 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.c
 	"juego.h"
 
-1717180070 c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.h
+1717789941 c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.h
 	<stdio.h>
 	"lista_simple.h"
 	<curl/curl.h>
@@ -108,33 +108,36 @@
 	"pregunta.h"
 	"respuesta.h"
 
-1717178934 c:\users\usuario\desktop\tp-program\tp-algoritmo\lista_simple.h
+1717789612 c:\users\usuario\desktop\tp-program\tp-algoritmo\lista_simple.h
 	<string.h>
 	<stdlib.h>
 	<stddef.h>
 
-1717178589 c:\users\usuario\desktop\tp-program\tp-algoritmo\jugador.h
+1717789741 c:\users\usuario\desktop\tp-program\tp-algoritmo\jugador.h
 	<stdio.h>
 
-1717182734 c:\users\usuario\desktop\tp-program\tp-algoritmo\pregunta.h
+1717768498 c:\users\usuario\desktop\tp-program\tp-algoritmo\pregunta.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
+	"lista_simple.h"
+	"respuesta.h"
 
-1717179566 c:\users\usuario\desktop\tp-program\tp-algoritmo\respuesta.h
+1717786282 c:\users\usuario\desktop\tp-program\tp-algoritmo\respuesta.h
+	<stdio.h>
 
-1717178589 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\jugador.c
+1717789730 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\jugador.c
 	"jugador.h"
 
-1717179055 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\lista_simple.c
+1717789612 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\lista_simple.c
 	"lista_simple.h"
 
-1717102147 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\main.c
+1717687991 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\main.c
 	"juego.h"
 
-1717182734 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\pregunta.c
+1717783388 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\pregunta.c
 	"pregunta.h"
 
-1717179566 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\respuesta.c
+1717786424 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\respuesta.c
 	"respuesta.h"
 

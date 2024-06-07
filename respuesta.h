@@ -1,16 +1,19 @@
 #ifndef RESPUESTA_H_INCLUDED
 #define RESPUESTA_H_INCLUDED
 
+#include <stdio.h>
+
 typedef struct
 {
+    int ordenJugador;
     char respuesta;
-    double tiempo;
+    int tiempo;
     int puntaje;
 }
 tRespuesta;
 
-int determinarMejorTiempoYTiempoDuplicado(tRespuesta respuestas[][100],int cantJugadores, int rondaActual,double* mejorTiempo,int* existenDuplicado);
-int calcularPuntaje(char respuestaJugador,char respuestaCorrecta,double tiempoRespuesta,
-                    int tiempoLimite,double mejorTiempo,int existeDuplicadoMejorTiempo);
+int mostrarRespuesta(void* d, void* d2);
+int calcularPuntaje(char respuestaJugador,char respuestaCorrecta,int tiempoRespuesta,
+                    int tiempoLimite,int mejorTiempo,int existeDuplicadoMejorTiempo);
 
 #endif // RESPUESTA_H_INCLUDED
