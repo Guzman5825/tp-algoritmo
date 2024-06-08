@@ -2,18 +2,17 @@
 #define JUEGO_H_INCLUDED
 
 #include <stdio.h>
-#include "lista_simple.h"
-#include <curl/curl.h>
-#include "cJSON.h"
 #include <windows.h>
 #include <process.h>
+#include <curl/curl.h>
 #include <time.h>
 #include <conio.h>
+#include "lista_simple.h"
+#include "cJSON.h"
 #include "input.h"
 #include "jugador.h"
 #include "pregunta.h"
 #include "respuesta.h"
-
 #define MAX_CANT_JUGADORES 100
 #define MAX_CANT_RONDAS 100
 

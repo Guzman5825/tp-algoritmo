@@ -42,7 +42,6 @@ int cmpOrdenPregunta( const void* p1, const void *p2 ){
     const tPregunta* pre1=p1;
     const tPregunta* pre2=p2;
     return pre1->orden-pre2->orden;
-
 }
 
 int ModificarElOrdenPregunta( void* n, void* d){

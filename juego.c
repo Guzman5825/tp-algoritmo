@@ -21,6 +21,7 @@ int cargarJuego(tJuego* juego){
     cargarPreguntas( &juego->listaPreguntas, "https://664d06f4ede9a2b5565273e6.mockapi.io/PREGUNTAS",
                      juego->nivelEligido, juego->cantRondas );
 
+
     return 0;
 }
 

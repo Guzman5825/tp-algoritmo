@@ -47,6 +47,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="jugador.h" />
+		<Unit filename="listaCircular.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="listaCircular.h" />
 		<Unit filename="lista_simple.c">
 			<Option compilerVar="CC" />
 		</Unit>

@@ -91,18 +91,18 @@
 	<time.h>
 	<unistd.h>
 
-1717790463 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.c
+1717793901 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.c
 	"juego.h"
 
-1717789941 c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.h
+1717816988 c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.h
 	<stdio.h>
-	"lista_simple.h"
-	<curl/curl.h>
-	"cJSON.h"
 	<windows.h>
 	<process.h>
+	<curl/curl.h>
 	<time.h>
 	<conio.h>
+	"lista_simple.h"
+	"cJSON.h"
 	"input.h"
 	"jugador.h"
 	"pregunta.h"
@@ -135,7 +135,7 @@
 1717687991 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\main.c
 	"juego.h"
 
-1717783388 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\pregunta.c
+1717793900 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\pregunta.c
 	"pregunta.h"
 
 1717786424 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\respuesta.c
