@@ -2,8 +2,7 @@
 
 void crearJuego(tJuego* juego){
     crearLista( &juego->listaPreguntas );
-    crearLista(&juego->listaJugadores);
-    crearLista( &juego->listaMejorRes );
+    crearListaC(&juego->listaJugadores);
     juego->cantJug=0;
     juego->nivelEligido=0;
     juego->tiempoLimite=0;
@@ -16,18 +15,24 @@ int cargarJuego(tJuego* juego){
     juego->nivelEligido=1;  ///esto se debe pedir aparte
 
     cargarJugadores(juego);
+
+    if(juego->cantJug==0)
+        return 0;
+
     puts("cargando preguntas...");
 
     cargarPreguntas( &juego->listaPreguntas, "https://664d06f4ede9a2b5565273e6.mockapi.io/PREGUNTAS",
                      juego->nivelEligido, juego->cantRondas );
 
 
-    return 0;
+    return 1;
 }
 
 int cargarJugadores ( tJuego *juego )
 {
     tJugador jugador;
+    t_Lista jugadores;
+    crearLista(&jugadores);
 
     puts("Ingrese el nombre de un jugador o FIN si ya ingreso todos los nombres!!!!");
     fflush(stdin);
@@ -37,15 +42,22 @@ int cargarJugadores ( tJuego *juego )
     {
         jugador.orden = rand();//se podria tambien con un map asignarle un orden y luego ordenar la lista por el orden
         jugador.puntajeTotal=0;
-        insertarEnListaOrdenadoConDuplicado( &juego->listaJugadores, &jugador, sizeof( tJugador ),cmpJugadorXOrdenMenAMay );
+        insertarEnListaOrdenadoConDuplicado( &jugadores, &jugador, sizeof( tJugador ),cmpJugadorXOrdenMenAMay );
         juego->cantJug++;
         puts("Ingrese el nombre de un jugador");
         fflush(stdin);
         gets( jugador.nombre );
     }
 
+    while(!listaVacia(&jugadores)){
+        verDatoDeListaEnPos(&jugadores,&jugador,sizeof(tJugador),0);
+        eliminarDeListaEnPos(&jugadores,0);
+        insertarEnSiguiente(&juego->listaJugadores,&jugador,sizeof(tJugador));
+    }
+
+
     int orden=0;
-    mapLista(&juego->listaJugadores,ModificarElOrdenJugador,&orden);
+    mapListaC(&juego->listaJugadores,ModificarElOrdenJugador,&orden);
 
     return TODO_OK;
 }
@@ -114,7 +126,7 @@ int cargarPreguntas ( t_Lista *lista, const char *urlAPI, size_t nivelDifucultad
         if(pregunta.dificultad==nivelDifucultad){
             pregunta.orden=rand();
             aleatorizarRespuestaCorrecta( &pregunta );
-            crearLista(&(pregunta.respuestas)); //dado que siempre se usara esto para crear la listas de preguntas
+            crearListaC(&(pregunta.respuestas)); //dado que siempre se usara esto para crear la listas de preguntas
             insertarEnListaOrdenadoConDuplicado( lista, &pregunta, sizeof(tPregunta),cmpOrdenPregunta);
         }
     }
@@ -159,12 +171,14 @@ int contestarPregunta(void* d, void* d2){
     respuesta.ordenJugador=juego->jugadorActual;    ///aca guardamos el orden
     printf("%s\n",pregunta->pregunta);
     verOpcionesPreguntas(pregunta);
+
     obtenerRespuestaDeTecladoTemporizado(&(respuesta.respuesta),&tiempoTranscurrido,juego->tiempoLimite);
     respuesta.tiempo=(int)tiempoTranscurrido; //solo se queda con la parte ententera del double
 
     printf("Su respuesta es %c y tardo %2d segundos \n",respuesta.respuesta,respuesta.tiempo);
 
-    insertarEnListaAlFinalConDuplicados(&pregunta->respuestas,&respuesta,sizeof(respuesta));
+    insertarEnSiguiente(&pregunta->respuestas,&respuesta,sizeof(respuesta));
+    //insertarEnListaAlFinalConDuplicados(&pregunta->respuestas,&respuesta,sizeof(respuesta));    ///aca solo insertar con lista circular
 
     return 1;
 }
@@ -184,11 +198,19 @@ int juegaJugador(void* d, void* d2){
     return 1;
 }
 
+int ordenarPosiciones(void* d, void* d2){
+    tPregunta *pregunta=d;
+    tRespuesta resp;
+    resp.ordenJugador=0;
+    buscarPorClaveYaccionarEnListaC(&pregunta->respuestas,&resp,sizeof(tRespuesta),cmpOrdenJugador,NULL,NULL);
+    return 1;
+}
+
 int iniciarJuego(tJuego *juego){
 
     juego->jugadorActual=0;
-    mapLista(&juego->listaJugadores,juegaJugador,juego);
-
+    mapListaC(&juego->listaJugadores,juegaJugador,juego);
+    mapLista(&juego->listaPreguntas,ordenarPosiciones,NULL);
     return TODO_OK;
 }
 /**-------------------------------------------------------------------*/
@@ -202,8 +224,8 @@ int calcularPuntajeDeRespuesta(void* d, void* d2){
 
     tJugador j;
     j.orden=respuesta->ordenJugador;
-    insertarEnListaOrdenadoSinDuplicados(&c->jugadores,&j,sizeof(tJugador),
-                                         cmpJugadorXOrdenMenAMay,&respuesta->puntaje,sumarPuntos);
+    buscarPorClaveYaccionarEnListaC(&c->jugadores,&j,sizeof(tJugador),cmpJugadorXOrdenMenAMay,&respuesta->puntaje,sumarPuntos);
+
     return 1;
 }
 
@@ -223,14 +245,14 @@ int mejorTiempoValido(void* d, void* d2){
     return 1;
 }
 
-int calcularPuntajesDeRondas(void* d, void* d2){
+int calcularPuntajesDeTodasRespuestas(void* d, void* d2){
     tPregunta* pregunta =d;
     tContexto* c=d2;
     c->respuestaCorrecta=pregunta->opcionCorrecta;
     c->mejorTiempo=100000;
 
-    mapLista(&pregunta->respuestas,mejorTiempoValido,c);
-    mapLista(&pregunta->respuestas,calcularPuntajeDeRespuesta,c);
+    mapListaC(&pregunta->respuestas,mejorTiempoValido,c);
+    mapListaC(&pregunta->respuestas,calcularPuntajeDeRespuesta,c);
 
     return 1;
 }
@@ -239,24 +261,28 @@ int calcularResultadosYimprimir(tJuego *juego){
     tContexto c;
     c.jugadores=juego->listaJugadores;
     c.tiempoLimite=juego->tiempoLimite;
+    c.maximaPuntuacion=INT_MIN;
 
-    mapLista(&juego->listaPreguntas,calcularPuntajesDeRondas,&c);
+    mapLista(&juego->listaPreguntas,calcularPuntajesDeTodasRespuestas,&c);
     system("cls");
 
     puts("resultados.");
     printf("preguntas / jugadores:                   ");
-    mapLista(&juego->listaJugadores,imprimirJugador,stdout);
+    mapListaC(&juego->listaJugadores,imprimirJugador,stdout);
     puts("");
     mapLista(&juego->listaPreguntas,mostrarPreguntaYimprimirRespuesta,NULL);
 
     printf("puntajes totales:                        ");   ///puntajes totales ,despues lo veo
-    mapLista(&juego->listaJugadores,imprimirPuntajeTotalJugador,stdout);
+    mapListaC(&juego->listaJugadores,imprimirPuntajeTotalJugador,stdout);
+    printf("\nganadores:");
+    mapListaC(&juego->listaJugadores,obtenerMaximaPuntuacion,&(c.maximaPuntuacion) );
+    mapListaC(&juego->listaJugadores,imprimirGanadores,&(c.maximaPuntuacion));
 
     return TODO_OK;
 }
 
 void cerrarJuego(tJuego *juego){
-    vaciarLista(&juego->listaJugadores);
-    vaciarLista(&juego->listaMejorRes);
+    vaciarListaC(&juego->listaJugadores);
+    mapLista(&juego->listaPreguntas,vaciarRespuestas,NULL);
     vaciarLista(&juego->listaPreguntas);
 }

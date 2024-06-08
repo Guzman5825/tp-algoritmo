@@ -8,6 +8,7 @@
 #include <time.h>
 #include <conio.h>
 #include "lista_simple.h"
+#include "listaCircular.h"
 #include "cJSON.h"
 #include "input.h"
 #include "jugador.h"
@@ -18,8 +19,7 @@
 
 typedef struct{
     t_Lista listaPreguntas;
-    t_Lista listaJugadores;
-    t_Lista listaMejorRes;
+    tListaC listaJugadores;
     size_t cantJug;
     int nivelEligido;
     int tiempoLimite;
@@ -42,7 +42,7 @@ typedef struct
     int mejorTiempo;
     int existeTiempoMejorDuplicado;
     char respuestaCorrecta;
-    t_Lista jugadores;
+    tListaC jugadores;
 }
 tContexto;
 

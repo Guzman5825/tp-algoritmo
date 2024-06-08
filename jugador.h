@@ -20,5 +20,6 @@ int ModificarElOrdenJugador(void* n, void* d);
 int imprimirJugador ( void* dato, void *stream );
 int imprimirPuntajeTotalJugador ( void* dato, void *stream );
 int sumarPuntos( void* d,void* d2);
-
+int obtenerMaximaPuntuacion( void* d,void* d2);
+int imprimirGanadores(void* d,void* d2);
 #endif // JUGADOR_H_INCLUDED

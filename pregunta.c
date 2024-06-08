@@ -3,7 +3,7 @@
 int mostrarPreguntaYimprimirRespuesta(void* d, void* d2){
     tPregunta *p=d;
     printf("%-30.30s : resp=%c :",p->pregunta,p->opcionCorrecta);
-    mapLista(&p->respuestas,mostrarRespuesta,NULL);
+    mapListaC(&p->respuestas,mostrarRespuesta,NULL);
     puts("");
     return 1;
 }
@@ -52,3 +52,8 @@ int ModificarElOrdenPregunta( void* n, void* d){
     return 1;
 }
 
+int vaciarRespuestas(void* d, void* d2){
+    tPregunta *pregunta=d;
+    vaciarListaC(&pregunta->respuestas);
+    return 1;
+}

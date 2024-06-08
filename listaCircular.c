@@ -8,6 +8,14 @@ int listaVaciaC ( tListaC *lc ){
     return *lc==NULL;
 }
 
+int posicionarseEnSiguiente(tListaC *lc){
+    if(*lc!=NULL)
+        return 0;
+    *lc=(*lc)->sig;
+
+    return 1;
+}
+
 int insertarEnSiguiente( tListaC *lc, const void *elem, size_t tamElem){
     tNodo *nue;
 
@@ -37,7 +45,7 @@ int insertarEnSiguiente( tListaC *lc, const void *elem, size_t tamElem){
     return 1;
 }
 
-int buscarPorClaveYaccionar( tListaC *lc, const void *elem, size_t tamElem, Cmp cmp, void *datosAccion, Accion2 acc ){
+int buscarPorClaveYaccionarEnListaC( tListaC *lc, const void *elem, size_t tamElem, Cmp cmp, void *datosAccion, Accion2 acc ){
     tNodo* primero=*lc, *act=*lc;
 
     if(act==NULL)
@@ -86,12 +94,12 @@ void vaciarListaC ( tListaC *lc ){
     while(*lc!=NULL && (*lc)!=(*lc)->sig ){
         elim=(*lc)->sig;
         (*lc)->sig=elim->sig;
-        free(elim->sig);
+        free(elim->dato);
         free(elim);
     }
 
     if(*lc!=NULL && *lc==(*lc)->sig ){
-        free((*lc)->sig);
+        free((*lc)->dato);
         free(*lc);
     }
 

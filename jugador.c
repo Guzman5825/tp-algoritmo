@@ -52,5 +52,21 @@ int sumarPuntos( void* d,void* d2){
     return 1;
 }
 
+int obtenerMaximaPuntuacion( void* d,void* d2){
+    tJugador * j = (tJugador*)d;
+    int *n=d2;
+    if(j->puntajeTotal>*n)
+        *n=j->puntajeTotal;
+    return 1;
+}
 
+int imprimirGanadores(void* d,void* d2){
+    tJugador * j = (tJugador*)d;
+    int *n=d2;
+
+    if(*n==j->puntajeTotal)
+        printf("%s  ",j->nombre);
+
+    return 1;
+}
 

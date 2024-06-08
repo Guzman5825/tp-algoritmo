@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "listaCircular.h"
 #include "lista_simple.h"
 #include "respuesta.h"
 #define MAX_OPCIONES 4
@@ -17,7 +18,7 @@ typedef struct
     char opciones[MAX_OPCIONES][ MAX_CARACTERES_OPCIONES ];
     char opcionCorrecta;
     int orden;
-    t_Lista respuestas;
+    tListaC respuestas;
 }
 tPregunta;
 
@@ -27,4 +28,6 @@ int filtraXDificultad ( const void *dato1, const void *dato2 );
 void aleatorizarRespuestaCorrecta ( tPregunta *pre );
 int cmpOrdenPregunta( const void* p1, const void *p2 );
 int ModificarElOrdenPregunta(void* n, void* d);
+int vaciarRespuestas(void* d, void* d2);
+
 #endif // PREGUNTA_H_INCLUDED

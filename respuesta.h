@@ -13,6 +13,7 @@ typedef struct
 tRespuesta;
 
 int mostrarRespuesta(void* d, void* d2);
+int cmpOrdenJugador( const void* r1, const void *r2 );
 int calcularPuntaje(char respuestaJugador,char respuestaCorrecta,int tiempoRespuesta,
                     int tiempoLimite,int mejorTiempo,int existeDuplicadoMejorTiempo);
 

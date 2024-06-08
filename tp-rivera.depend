@@ -91,10 +91,10 @@
 	<time.h>
 	<unistd.h>
 
-1717793901 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.c
+1717822722 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.c
 	"juego.h"
 
-1717816988 c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.h
+1717819692 c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.h
 	<stdio.h>
 	<windows.h>
 	<process.h>
@@ -102,6 +102,7 @@
 	<time.h>
 	<conio.h>
 	"lista_simple.h"
+	"listaCircular.h"
 	"cJSON.h"
 	"input.h"
 	"jugador.h"
@@ -113,31 +114,40 @@
 	<stdlib.h>
 	<stddef.h>
 
-1717789741 c:\users\usuario\desktop\tp-program\tp-algoritmo\jugador.h
+1717822362 c:\users\usuario\desktop\tp-program\tp-algoritmo\jugador.h
 	<stdio.h>
 
-1717768498 c:\users\usuario\desktop\tp-program\tp-algoritmo\pregunta.h
+1717822549 c:\users\usuario\desktop\tp-program\tp-algoritmo\pregunta.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
+	"listaCircular.h"
 	"lista_simple.h"
 	"respuesta.h"
 
-1717786282 c:\users\usuario\desktop\tp-program\tp-algoritmo\respuesta.h
+1717821135 c:\users\usuario\desktop\tp-program\tp-algoritmo\respuesta.h
 	<stdio.h>
 
-1717789730 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\jugador.c
+1717822362 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\jugador.c
 	"jugador.h"
 
 1717789612 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\lista_simple.c
 	"lista_simple.h"
 
-1717687991 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\main.c
+1717822730 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\main.c
 	"juego.h"
 
-1717793900 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\pregunta.c
+1717822559 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\pregunta.c
 	"pregunta.h"
 
-1717786424 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\respuesta.c
+1717821135 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\respuesta.c
 	"respuesta.h"
+
+1717820855 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\listacircular.c
+	"listaCircular.h"
+
+1717820855 c:\users\usuario\desktop\tp-program\tp-algoritmo\listacircular.h
+	<string.h>
+	<stdlib.h>
+	<stddef.h>
 

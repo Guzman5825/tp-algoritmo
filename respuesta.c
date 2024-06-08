@@ -6,6 +6,11 @@ int mostrarRespuesta(void* d, void* d2){
     return 1;
 }
 
+int cmpOrdenJugador( const void* r1, const void *r2 ){
+    const tRespuesta *resp1=r1;
+    const tRespuesta *resp2=r2;
+    return resp1->ordenJugador - resp2->ordenJugador;
+}
 
 int calcularPuntaje(char respuestaJugador,char respuestaCorrecta,int tiempoRespuesta,
                     int tiempoLimite,int mejorTiempo,int existeDuplicadoMejorTiempo){

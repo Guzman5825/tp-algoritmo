@@ -21,10 +21,10 @@ typedef int(*Accion2)( void*, void* );
 
 void crearListaC ( tListaC *l );
 int listaVaciaC ( tListaC *lc );
-//int insertarEnListaOrdenadoConDuplicado( tListaC *lista, const void *elem, size_t tamElem, Cmp cmp );
+int posicionarseEnSiguiente(tListaC *lc);
 int insertarEnSiguiente( tListaC *lista, const void *elem, size_t tamElem);
 void mapListaC(tListaC *lista, Accion2 acc, void *datoAccion );
-int buscarPorClaveYaccionar( tListaC *lista, const void *elem, size_t tamElem, Cmp cmp, void *datosAccion, Accion2 acc );
+int buscarPorClaveYaccionarEnListaC( tListaC *lista, const void *elem, size_t tamElem, Cmp cmp, void *datosAccion, Accion2 acc );
 void vaciarListaC ( tListaC *lc );
 
 
