@@ -81,20 +81,20 @@
 1717822823 c:\users\usuario\desktop\tp-program\tp-algoritmo\cjson.h
 	<stddef.h>
 
-1717988339 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\input.c
+1717989689 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\input.c
 	"input.h"
 
-1717968769 c:\users\usuario\desktop\tp-program\tp-algoritmo\input.h
+1717989689 c:\users\usuario\desktop\tp-program\tp-algoritmo\input.h
 	<stdio.h>
 	<ctype.h>
 	<conio.h>
 	<time.h>
 	<unistd.h>
 
-1717988665 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.c
+1717992954 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.c
 	"juego.h"
 
-1717966480 c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.h
+1717993160 c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.h
 	<locale.h>
 	<stdio.h>
 	<windows.h>
@@ -110,6 +110,7 @@
 	"pregunta.h"
 	"respuesta.h"
 	"informe.h"
+	"archivo.h"
 
 1717822823 c:\users\usuario\desktop\tp-program\tp-algoritmo\lista_simple.h
 	<string.h>
@@ -164,4 +165,12 @@
 
 1717907757 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\informe.c
 	"informe.h"
+
+1717992915 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\archivo.c
+	"archivo.h"
+
+1717992978 c:\users\usuario\desktop\tp-program\tp-algoritmo\archivo.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
 

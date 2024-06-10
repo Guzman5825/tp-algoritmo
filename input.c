@@ -37,3 +37,11 @@ int obtenerTextoNoVacioDeTeclado(char* TextoDestino){
 
     return 1;
 }
+
+int obtenerNombreDeArchivoConFecha(char* textoDestino,unsigned tamTextoDestino){
+    time_t tiempoTranscurrido = time(NULL);
+    struct tm *fechaHora = localtime(&tiempoTranscurrido);
+    snprintf(textoDestino, tamTextoDestino, "informe-juego_%4d-%02d-%02d-%02d-%02d.txt",
+             (fechaHora->tm_year + 1900), (fechaHora->tm_mon + 1), fechaHora->tm_mday, fechaHora->tm_hour, fechaHora->tm_min);
+    return 1;
+}

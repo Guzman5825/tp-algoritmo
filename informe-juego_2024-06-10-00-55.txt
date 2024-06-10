@@ -1,0 +1,19 @@
+Pregunta: ¿Cual es la capital de Argentina?
+Opciones:
+  Opción 1: La plata
+  Opción 2: Mendoza
+  Opción 3: Buenos Aires
+  Opción 4: Cordoba
+Respuesta Correcta: C
+Pregunta: ¿Cuantas horas se encuentran en un dia?
+Opciones:
+  Opción 1: 25
+  Opción 2: 24
+  Opción 3: 48
+  Opción 4: 96
+Respuesta Correcta: B
+Respuestas Jugadores:
+Jugador Nro 0	respuesta A	puntos -2
+Jugador Nro 0	respuesta A	puntos -2
+Puntaje total -4 del jugador: a
+Ganador: a

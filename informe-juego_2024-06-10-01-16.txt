@@ -1,0 +1,22 @@
+Pregunta: ¿Cual es el color del cielo en un dia despejado?
+Opciones:
+  Opción 1: Azul
+  Opción 2: Verde
+  Opción 3: Rojo
+  Opción 4: Gris
+Respuesta Correcta: A
+Pregunta: ¿Que dia es navidad?
+Opciones:
+  Opción 1: 25 de Diciembre
+  Opción 2: 25 de Agosto
+  Opción 3: 25 de Junio
+  Opción 4: 25 de Enero
+Respuesta Correcta: A
+Respuestas Jugadores:
+Jugador Nro 0	respuesta A	puntos 1
+Jugador Nro 1	respuesta A	puntos 3
+Jugador Nro 0	respuesta A	puntos 1
+Jugador Nro 1	respuesta A	puntos 3
+Puntaje total 2 del jugador: b
+Puntaje total 6 del jugador: a
+Ganador: a

@@ -31,6 +31,10 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="archivo.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="archivo.h" />
 		<Unit filename="cJSON.c">
 			<Option compilerVar="CC" />
 		</Unit>

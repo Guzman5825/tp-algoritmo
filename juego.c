@@ -9,15 +9,17 @@ void crearJuego(tJuego* juego){
     srand(time(NULL));
 }
 
+
 int cargarJuego(tJuego* juego){
-    juego->tiempoLimite=10; ///luego pedir por config.txt   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    juego->cantRondas=2;    ///luego pedir por config.txt   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    cargarConfiguracionDeTxt(&juego->tiempoLimite,&juego->cantRondas);
 
     cargarJugadores(juego);
     if(juego->cantJug==0){
         puts("no se han ingresado jugadores");
         return 0;
     }
+
     cargarDificultad(juego);
 
     system("cls");
@@ -173,7 +175,7 @@ int contestarPregunta(void* d, void* d2){
     double tiempoTranscurrido;
     tRespuesta respuesta;
 
-    respuesta.ordenJugador=juego->jugadorActual;    ///aca guardamos el orden
+    respuesta.ordenJugador=juego->jugadorActual;
     printf("%s\n",pregunta->pregunta);
     verOpcionesPreguntas(pregunta);
 
@@ -183,7 +185,6 @@ int contestarPregunta(void* d, void* d2){
     printf("Su respuesta es %c y tardo %2d segundos \n",respuesta.respuesta,respuesta.tiempo);
 
     insertarEnSiguiente(&pregunta->respuestas,&respuesta,sizeof(respuesta));
-    //insertarEnListaAlFinalConDuplicados(&pregunta->respuestas,&respuesta,sizeof(respuesta));    ///aca solo insertar con lista circular
 
     return 1;
 }
@@ -225,7 +226,6 @@ int calcularPuntajeDeRespuesta(void* d, void* d2){
     tContexto * c =d2;
     respuesta->puntaje=calcularPuntaje(respuesta->respuesta,c->respuestaCorrecta,respuesta->tiempo,
                                      c->tiempoLimite,c->mejorTiempo,c->existeTiempoMejorDuplicado);
-    ///aca cambiarlo por una lista circular o lista circular doble
 
     tJugador j;
     j.orden=respuesta->ordenJugador;
@@ -305,7 +305,9 @@ int menu(){
 }
 
 void generarInforme(tJuego*juego,int puntuacioMax){
-    FILE*pa=fopen("informe.txt","wt");
+    char nombreArchivo[100];
+    obtenerNombreDeArchivoConFecha(nombreArchivo,sizeof(nombreArchivo));
+    FILE*pa=fopen(nombreArchivo,"wt");
     if (pa == NULL) {
         perror("Error al abrir el archivo");
         return;

@@ -14,5 +14,6 @@
 int obtenerRespuestaDeTecladoTemporizado(char* respuesta,double *tiempoRespuesta,int tiempoLimite);
 char obtenerRespuestaDeTecladoEntre(char letraMenor,char letraMayor);
 int obtenerTextoNoVacioDeTeclado(char* TextoDestino);
+int obtenerNombreDeArchivoConFecha(char* textoDestino,unsigned tamTextoDestino);
 
 #endif // INPUT_H_INCLUDED

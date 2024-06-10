@@ -16,6 +16,7 @@
 #include "pregunta.h"
 #include "respuesta.h"
 #include "informe.h"
+#include "archivo.h"
 #define MAX_CANT_JUGADORES 100
 #define MAX_CANT_RONDAS 100
 
@@ -55,15 +56,10 @@ int cargarJuego(tJuego *juego);
 int cargarJugadores ( tJuego *lista );
 int cargarPreguntas ( t_Lista *lista, const char *urlAPI, size_t nivelDificultad, size_t cantRaunds );
 void cargarDificultad(tJuego *lista);
-
 void parsearPregunta ( tPregunta *destinoPregun, cJSON *origen );
-
 int iniciarJuego(tJuego *juego);
-
 int calcularResultadosYimprimir(tJuego *juego);
 void cerrarJuego(tJuego *juego);
-
-
 void generarInforme(tJuego *juego,int puntuacioMax);
 
 #endif // JUEGO_H_INCLUDED
