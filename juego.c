@@ -288,7 +288,7 @@ int calcularResultadosYimprimir(tJuego *juego){
 
     mapLista(&juego->listaPreguntas,calcularPuntajesDeTodasRespuestas,&c);
     system("cls");
-
+/*
     puts("resultados.");
     printf("preguntas / jugadores:                                                            ");
     mapListaC(&juego->listaJugadores,imprimirJugador,stdout);
@@ -297,11 +297,14 @@ int calcularResultadosYimprimir(tJuego *juego){
 
     printf("puntajes totales:                                                        ");   ///puntajes totales ,despues lo veo
     mapListaC(&juego->listaJugadores,imprimirPuntajeTotalJugador,stdout);
-    printf("\nganadores:");
-    mapListaC(&juego->listaJugadores,obtenerMaximaPuntuacion,&(c.maximaPuntuacion) );
-    mapListaC(&juego->listaJugadores,imprimirGanadores,&(c.maximaPuntuacion));
+*/
 
-    generarInforme(juego,(c.maximaPuntuacion));
+    mapListaC(&juego->listaJugadores,obtenerMaximaPuntuacion,&(c.maximaPuntuacion) );
+    printf("\nganadores/ganadores:");
+    mapListaC(&juego->listaJugadores,imprimirGanadores,&(c.maximaPuntuacion));
+    printf("\npuntuacion ganadora: %d",c.maximaPuntuacion);
+
+    generarInforme(juego,&c);
 
     return TODO_OK;
 }
@@ -322,7 +325,7 @@ int menu(){
     return 1;
 }
 
-void generarInforme(tJuego*juego,int puntuacioMax){
+void generarInforme(tJuego*juego,tContexto *c){
     char nombreArchivo[100];
     obtenerNombreDeArchivoConFecha(nombreArchivo,sizeof(nombreArchivo));
     FILE*pa=fopen(nombreArchivo,"wt");
@@ -330,11 +333,13 @@ void generarInforme(tJuego*juego,int puntuacioMax){
         perror("Error al abrir el archivo");
         return;
     }
+    c->archivo=pa;
+
     mapLista(&juego->listaPreguntas,imprimirEnArchivoPregunta,pa);
     fprintf(pa,"Respuestas Jugadores:");
     mapLista(&juego->listaPreguntas,puntosPorPreguntaParaArchivo,pa);
     mapListaC(&juego->listaJugadores,imprimirJugadorEnArchivo,pa);
-    ganadoresEnArchivo(&juego->listaJugadores,pa,puntuacioMax);
+    ganadoresEnArchivo(&juego->listaJugadores,pa,c->maximaPuntuacion);
 
     fclose(pa);
 }

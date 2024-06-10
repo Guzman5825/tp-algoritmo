@@ -1,10 +1,9 @@
 #include "informe.h"
 
-
 int imprimirEnArchivoPregunta(void*preg,void*pa){
     tPregunta*pregunta=(tPregunta*)preg;
     FILE *archivo = (FILE *)pa;
-    fprintf(archivo, "Pregunta: %s\n", pregunta->pregunta);
+    fprintf(archivo, "%d)Pregunta: %s\n",pregunta->orden+1, pregunta->pregunta);
     fprintf(archivo, "Opciones:\n");
     for (int i = 0; i < MAX_OPCIONES; i++) {
         fprintf(archivo, "  Opción %d: %s\n", i + 1, pregunta->opciones[i]);
@@ -15,6 +14,8 @@ int imprimirEnArchivoPregunta(void*preg,void*pa){
 
 int puntosPorPreguntaParaArchivo(void*preg,void*pa){
     tPregunta*pregunta=(tPregunta*)preg;
+    FILE *archivo = (FILE *)pa;
+    fprintf(archivo, "\nRespuesta de la pregunta N°%d:", pregunta->orden+1);
     mapListaC(&pregunta->respuestas,imprimirPuntosPorPreguntaEnArchivo,pa);
     return 1;
 }
@@ -24,7 +25,8 @@ int imprimirPuntosPorPreguntaEnArchivo(void*elem,void*pa){
     FILE *archivo = (FILE *)pa;
     fprintf(archivo, "\nJugador Nro %d\t", resp->ordenJugador);
     fprintf(archivo, "respuesta %c\t", resp->respuesta);
-    fprintf(archivo, "puntos %d", resp->puntaje);
+    fprintf(archivo, "puntos %d\t", resp->puntaje);
+    fprintf(archivo, "tiempo en responder %d segundos", resp->tiempo);
     return 1;
 }
 

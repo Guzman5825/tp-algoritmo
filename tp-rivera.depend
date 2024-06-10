@@ -91,10 +91,10 @@
 	<time.h>
 	<unistd.h>
 
-1717995180 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.c
+1717996634 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.c
 	"juego.h"
 
-1717993160 c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.h
+1717998252 c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.h
 	<locale.h>
 	<stdio.h>
 	<windows.h>
@@ -163,7 +163,7 @@
 	"juego.h"
 	"jugador.h"
 
-1717907757 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\informe.c
+1717998057 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\informe.c
 	"informe.h"
 
 1717992915 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\archivo.c

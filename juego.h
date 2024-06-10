@@ -46,6 +46,7 @@ typedef struct
     int existeTiempoMejorDuplicado;
     char respuestaCorrecta;
     tListaC jugadores;
+    FILE* archivo;
 }
 tContexto;
 
@@ -60,6 +61,6 @@ void parsearPregunta ( tPregunta *destinoPregun, cJSON *origen );
 int iniciarJuego(tJuego *juego);
 int calcularResultadosYimprimir(tJuego *juego);
 void cerrarJuego(tJuego *juego);
-void generarInforme(tJuego *juego,int puntuacioMax);
+void generarInforme(tJuego*juego,tContexto *c);
 
 #endif // JUEGO_H_INCLUDED
