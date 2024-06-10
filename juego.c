@@ -34,13 +34,17 @@ int cargarJuego(tJuego* juego){
 int cargarJugadores ( tJuego *juego )
 {
     tJugador jugador={"",0,0};
+    char nombreLargo[2000];
     t_Lista jugadores;
 
     crearLista(&jugadores);
 
-    puts("Ingrese el nombre de un jugador o FIN si ya ingreso todos los nombres.");
+    system("cls");
+    puts("Ingrese el nombre de un jugador o FIN si ya ingreso todos los nombres. no mas de 20 caracteres por nombre");
 
-    obtenerTextoNoVacioDeTeclado(jugador.nombre);
+    obtenerTextoNoVacioDeTeclado(nombreLargo);
+    strncpy(jugador.nombre, nombreLargo, 20);
+    jugador.nombre[20]='\0';
 
     while( strcmpi( "FIN", jugador.nombre ) != 0 )
     {
@@ -48,7 +52,9 @@ int cargarJugadores ( tJuego *juego )
         insertarEnListaOrdenadoConDuplicado( &jugadores, &jugador, sizeof( tJugador ),cmpJugadorXOrdenMenAMay );
         juego->cantJug++;
         puts("Ingrese el nombre de un jugador");
-        obtenerTextoNoVacioDeTeclado(jugador.nombre);
+        obtenerTextoNoVacioDeTeclado(nombreLargo);
+        strncpy(jugador.nombre, nombreLargo, 20);
+        jugador.nombre[20]='\0';
     }
 
 
@@ -142,12 +148,14 @@ int cargarPreguntas ( t_Lista *lista, const char *urlAPI, size_t nivelDifucultad
     }
     int orden=0;
     mapLista(lista,ModificarElOrdenPregunta,&orden);
+    fflush(stdin);
     return 1;
 }
 
 void cargarDificultad(tJuego *lista){
     int nivel=0;
-    printf("\nIngrese nivel de dificultad\n1:Baja \n2:Media \n3:Alta\n");
+    system("cls");
+    printf("Ingrese nivel de dificultad\n1:Baja \n2:Media \n3:Alta\n");
     nivel=obtenerRespuestaDeTecladoEntre('1','3');
     lista->nivelEligido=nivel-'0';
 }
@@ -234,7 +242,8 @@ int iniciarJuego(tJuego *juego){
 
     juego->jugadorActual=0;
     mapListaC(&juego->listaJugadores,juegaJugador,juego);
-    mapLista(&juego->listaPreguntas,ordenarPosiciones,NULL);
+    mapLista(&juego->listaPreguntas,ordenarPosiciones,NULL);    //para que la lista circular apunte al primer turno y quede un paralalismo
+
     return TODO_OK;
 }
 /**-------------------------------------------------------------------*/
@@ -299,17 +308,24 @@ int calcularResultadosYimprimir(tJuego *juego){
     mapListaC(&juego->listaJugadores,imprimirPuntajeTotalJugador,stdout);
 */
 
+    system("cls");
+    puts("juego terminado , ingrese cualquier tecla para mostrar el/los ganador/ganadores");
+    getch();
+    system("cls");
+
     mapListaC(&juego->listaJugadores,obtenerMaximaPuntuacion,&(c.maximaPuntuacion) );
-    printf("\nganadores/ganadores:");
+    printf("ganadores/ganadores:");
     mapListaC(&juego->listaJugadores,imprimirGanadores,&(c.maximaPuntuacion));
-    printf("\npuntuacion ganadora: %d",c.maximaPuntuacion);
-
+    printf("\npuntuacion ganadora: %d\n",c.maximaPuntuacion);
+    puts("para mas detalle lea el informe generado...");
     generarInforme(juego,&c);
-
+    puts("ingrese cualquier tecla para finalizar la partida");
+    getch();
     return TODO_OK;
 }
 
 void cerrarJuego(tJuego *juego){
+    system("cls");
     puts("\ncerrando juego...");
     vaciarListaC(&juego->listaJugadores);
     mapLista(&juego->listaPreguntas,vaciarRespuestas,NULL);
@@ -318,7 +334,7 @@ void cerrarJuego(tJuego *juego){
 
 int menu(){
     char eleccion;
-    printf("\n[A] Jugar\n[B] Salir\n");
+    printf("[A] Jugar\n[B] Salir\n");
     eleccion=obtenerRespuestaDeTecladoEntre('A','B');
     if(eleccion=='B')
         return 0;
@@ -336,11 +352,13 @@ void generarInforme(tJuego*juego,tContexto *c){
     c->archivo=pa;
 
     mapLista(&juego->listaPreguntas,imprimirEnArchivoPregunta,pa);
-    fprintf(pa,"Respuestas Jugadores:");
+    fprintf(pa,"Respuestas Jugadores:\n");
     mapLista(&juego->listaPreguntas,puntosPorPreguntaParaArchivo,c);
+    fprintf(pa,"puntajes Totales de cada Jugador:\n");
     mapListaC(&juego->listaJugadores,imprimirJugadorEnArchivo,pa);
+    fprintf(pa,"ganadores/ganadores:\n");
     ganadoresEnArchivo(&juego->listaJugadores,pa,c->maximaPuntuacion);
-
+    fprintf(pa,"puntaje ganador:%d\n",c->maximaPuntuacion);
     fclose(pa);
 }
 

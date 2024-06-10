@@ -3,7 +3,7 @@
 int imprimirEnArchivoPregunta(void*preg,void*pa){
     tPregunta*pregunta=(tPregunta*)preg;
     FILE *archivo = (FILE *)pa;
-    fprintf(archivo, "%d)Pregunta: %s\n",pregunta->orden+1, pregunta->pregunta);
+    fprintf(archivo, "Pregunta N°%d: %s\n",pregunta->orden+1, pregunta->pregunta);
     fprintf(archivo, "Opciones:\n");
     for (int i = 0; i < MAX_OPCIONES; i++) {
         fprintf(archivo, "  Opción %d: %s\n", i + 1, pregunta->opciones[i]);
@@ -15,7 +15,7 @@ int imprimirEnArchivoPregunta(void*preg,void*pa){
 int puntosPorPreguntaParaArchivo(void*preg,void*pa){
     tPregunta*pregunta=(tPregunta*)preg;
     tContexto *c=pa;
-    fprintf(c->archivo, "\nRespuesta de la pregunta N°%d:", pregunta->orden+1);
+    fprintf(c->archivo, "Respuesta de la pregunta N°%d:\n", pregunta->orden+1);
     mapListaC(&pregunta->respuestas,imprimirPuntosPorPreguntaEnArchivo,pa);
     return 1;
 }
@@ -27,20 +27,19 @@ int imprimirPuntosPorPreguntaEnArchivo(void*elem,void*pa){
     j.orden=resp->ordenJugador;
 
     //fprintf(c->archivo, "\nJugador Nro %d\t:", resp->ordenJugador+1);
-    fprintf(c->archivo, "\nJugador ");
+    fprintf(c->archivo, "Jugador ");
     buscarPorClaveYaccionarEnListaC(&c->jugadores,&j,sizeof(tJugador),cmpJugadorXOrdenMenAMay,
                                     c->archivo,imprimirJugador);
-
-    fprintf(c->archivo, "respuesta %c\t", resp->respuesta);
-    fprintf(c->archivo, "puntos %d\t", resp->puntaje);
-    fprintf(c->archivo, "tiempo en responder %d segundos", resp->tiempo);
+    fprintf(c->archivo, "  resp:'%c'", resp->respuesta);
+    fprintf(c->archivo, "  tiempo:%3ds", resp->tiempo);
+    fprintf(c->archivo, "  puntos:%1d\n", resp->puntaje);
     return 1;
 }
 
 int imprimirJugadorEnArchivo(void *jug, void *pa) {
     tJugador *jugador = (tJugador *)jug;
     FILE *archivo = (FILE *)pa;
-    fprintf(archivo, "\nPuntaje total %d del jugador: %s", jugador->puntajeTotal,jugador->nombre);
+    fprintf(archivo, "Puntaje total %d del jugador: %s\n", jugador->puntajeTotal,jugador->nombre);
     return 1;
 }
 
@@ -63,5 +62,5 @@ int cmpJugaPuntMax(const void*elem,int punt){
 
 void imprimirGanadoresEnArchivo(const void*dato,FILE*pa){
     tJugador*jug=(tJugador*)dato;
-    fprintf(pa, "\nGanador: %s", jug->nombre);
+    fprintf(pa, "--Ganador: %s\n", jug->nombre);
 }
