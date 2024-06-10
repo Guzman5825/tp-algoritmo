@@ -91,7 +91,7 @@
 	<time.h>
 	<unistd.h>
 
-1717992954 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.c
+1717995180 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.c
 	"juego.h"
 
 1717993160 c:\users\usuario\desktop\tp-program\tp-algoritmo\juego.h
@@ -117,7 +117,7 @@
 	<stdlib.h>
 	<stddef.h>
 
-1717822823 c:\users\usuario\desktop\tp-program\tp-algoritmo\jugador.h
+1717995172 c:\users\usuario\desktop\tp-program\tp-algoritmo\jugador.h
 	<stdio.h>
 
 1717822823 c:\users\usuario\desktop\tp-program\tp-algoritmo\pregunta.h
@@ -131,7 +131,7 @@
 1717822823 c:\users\usuario\desktop\tp-program\tp-algoritmo\respuesta.h
 	<stdio.h>
 
-1717903295 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\jugador.c
+1717995223 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\jugador.c
 	"jugador.h"
 
 1717822823 source:c:\users\usuario\desktop\tp-program\tp-algoritmo\lista_simple.c

@@ -7,6 +7,13 @@ int verJugador ( const void* dato, void *stream )
     return 1;
 }
 
+int mostrarJugarConOrdenReal( void* dato, void *stream )
+{
+    tJugador *jugador = (tJugador*)dato;
+    fprintf((FILE*)stream,"turno:%d nombre:%s \n", jugador->orden+1,jugador->nombre);
+    return 1;
+}
+
 int cmpJugadorXOrdenMenAMay ( const void* j1, const void *j2 )
 {
     tJugador *jExistente = (tJugador*)j1;

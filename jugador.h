@@ -14,6 +14,7 @@ typedef struct
 tJugador;
 
 int verJugador ( const void* dato, void *stream );
+int mostrarJugarConOrdenReal( void* dato, void *stream );
 int cmpJugadorXOrdenMenAMay ( const void* j1, const void *j2 );
 int cmpJugadorXOrdenMayAMen ( const void* j1, const void *j2 );
 int ModificarElOrdenJugador(void* n, void* d);

@@ -193,11 +193,18 @@ int juegaJugador(void* d, void* d2){
     tJugador *jugador=d;
     tJuego *juego=d2;
 
+    //limpiar pantalla
+    system("cls");
+    printf("ahora es el turno del jugador: %s\n", jugador->nombre);
+    puts("ingrese cualquier tecla si esta listo para jugar...");
+    getch();
+    system("cls");
+
     printf("Turno del jugador: %s\n", jugador->nombre);
     mapLista(&juego->listaPreguntas,contestarPregunta,juego);
 
-    puts("turno terminado,ingrese nueva tecla para continuar");
-    getchar();
+    puts("turno terminado,ingrese cualquier tecla para continuar...");
+    getch();
     system("cls");
 
     juego->jugadorActual++;
@@ -212,7 +219,18 @@ int ordenarPosiciones(void* d, void* d2){
     return 1;
 }
 
+
+
 int iniciarJuego(tJuego *juego){
+    ///mostrar Lista de Jugadores y orden en como lo responde    !!!!!!!!!!!!!!!
+    system("cls");
+    puts("INFORMACION PARA JUGAR");
+    puts("orden de los jugadores:");
+    mapListaC(&juego->listaJugadores,mostrarJugarConOrdenReal,stdout);
+    printf("cantidad de preguntas: %d\n",juego->cantRondas);
+    printf("tiempo limite por pregunta:%d segundos\n",juego->tiempoLimite);
+    puts("ingrese cualquier tecla para continuar...");
+    getch();
 
     juego->jugadorActual=0;
     mapListaC(&juego->listaJugadores,juegaJugador,juego);
