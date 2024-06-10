@@ -1,10 +1,13 @@
 #include "juego.h"
+
 int main()
 {
+    setlocale(LC_CTYPE,"spanish");
+
     tJuego juego;
     crearJuego(&juego);
 
-    if(cargarJuego(&juego)){
+    if(menu() && cargarJuego(&juego)){
         iniciarJuego(&juego);
         calcularResultadosYimprimir(&juego);
     }

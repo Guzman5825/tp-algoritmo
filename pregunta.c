@@ -2,7 +2,7 @@
 
 int mostrarPreguntaYimprimirRespuesta(void* d, void* d2){
     tPregunta *p=d;
-    printf("%-30.30s : resp=%c :",p->pregunta,p->opcionCorrecta);
+    printf("%-70.70s : resp=%c :",p->pregunta,p->opcionCorrecta);
     mapListaC(&p->respuestas,mostrarRespuesta,NULL);
     puts("");
     return 1;

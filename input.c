@@ -12,7 +12,28 @@ int obtenerRespuestaDeTecladoTemporizado(char* respuesta,double *tiempoRespuesta
             *respuesta = toupper(_getch());
         *tiempoRespuesta = (double)(clock() - start_time) / CLOCKS_PER_SEC;
     }
-
     return TODO_OK;
 }
 
+char obtenerRespuestaDeTecladoEntre(char letraMenor,char letraMayor){
+    char opcionEligida='-';
+    while( !(opcionEligida>=letraMenor && opcionEligida<=letraMayor) ) {
+        usleep(1000);
+        if (kbhit())
+            opcionEligida =  toupper(_getch());
+    }
+
+    return opcionEligida;
+}
+
+int obtenerTextoNoVacioDeTeclado(char* TextoDestino){
+    if(TextoDestino==NULL)
+        return 0;
+    fflush(stdin);
+    gets(TextoDestino);
+    while(*TextoDestino=='\0'){
+        gets(TextoDestino);
+    }
+
+    return 1;
+}

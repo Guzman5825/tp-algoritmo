@@ -12,5 +12,7 @@
 #define esOpcionValida(x) ( (x>='A' && x<='D') ? (1) : (0) )
 
 int obtenerRespuestaDeTecladoTemporizado(char* respuesta,double *tiempoRespuesta,int tiempoLimite);
+char obtenerRespuestaDeTecladoEntre(char letraMenor,char letraMayor);
+int obtenerTextoNoVacioDeTeclado(char* TextoDestino);
 
 #endif // INPUT_H_INCLUDED

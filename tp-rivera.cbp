@@ -35,6 +35,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="cJSON.h" />
+		<Unit filename="informe.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="informe.h" />
 		<Unit filename="input.c">
 			<Option compilerVar="CC" />
 		</Unit>

@@ -10,51 +10,51 @@ void crearJuego(tJuego* juego){
 }
 
 int cargarJuego(tJuego* juego){
-    juego->tiempoLimite=10; ///luego pedir por config.txt
-    juego->cantRondas=2;    ///luego pedir por config.txt
-    juego->nivelEligido=1;  ///esto se debe pedir aparte
+    juego->tiempoLimite=10; ///luego pedir por config.txt   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    juego->cantRondas=2;    ///luego pedir por config.txt   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     cargarJugadores(juego);
-
-    if(juego->cantJug==0)
+    if(juego->cantJug==0){
+        puts("no se han ingresado jugadores");
         return 0;
+    }
+    cargarDificultad(juego);
 
-    puts("cargando preguntas...");
+    system("cls");
+    puts("\ncargando preguntas...");
 
     cargarPreguntas( &juego->listaPreguntas, "https://664d06f4ede9a2b5565273e6.mockapi.io/PREGUNTAS",
                      juego->nivelEligido, juego->cantRondas );
-
 
     return 1;
 }
 
 int cargarJugadores ( tJuego *juego )
 {
-    tJugador jugador;
+    tJugador jugador={"",0,0};
     t_Lista jugadores;
+
     crearLista(&jugadores);
 
-    puts("Ingrese el nombre de un jugador o FIN si ya ingreso todos los nombres!!!!");
-    fflush(stdin);
-    gets(jugador.nombre);// se podria usar el fgets pero debemos eliminar el \n del final
+    puts("Ingrese el nombre de un jugador o FIN si ya ingreso todos los nombres.");
+
+    obtenerTextoNoVacioDeTeclado(jugador.nombre);
 
     while( strcmpi( "FIN", jugador.nombre ) != 0 )
     {
-        jugador.orden = rand();//se podria tambien con un map asignarle un orden y luego ordenar la lista por el orden
-        jugador.puntajeTotal=0;
+        jugador.orden = rand();
         insertarEnListaOrdenadoConDuplicado( &jugadores, &jugador, sizeof( tJugador ),cmpJugadorXOrdenMenAMay );
         juego->cantJug++;
         puts("Ingrese el nombre de un jugador");
-        fflush(stdin);
-        gets( jugador.nombre );
+        obtenerTextoNoVacioDeTeclado(jugador.nombre);
     }
+
 
     while(!listaVacia(&jugadores)){
         verDatoDeListaEnPos(&jugadores,&jugador,sizeof(tJugador),0);
         eliminarDeListaEnPos(&jugadores,0);
         insertarEnSiguiente(&juego->listaJugadores,&jugador,sizeof(tJugador));
     }
-
 
     int orden=0;
     mapListaC(&juego->listaJugadores,ModificarElOrdenJugador,&orden);
@@ -96,8 +96,6 @@ int cargarPreguntas ( t_Lista *lista, const char *urlAPI, size_t nivelDifucultad
     tJsontxt jsonRes;
     tPregunta pregunta;
     int i, cantElem;
-
-
 
     if( ! inicializarJsonTxt( &jsonRes )  )
         return 0;//No tengo donde almacenar la respuesta
@@ -145,15 +143,22 @@ int cargarPreguntas ( t_Lista *lista, const char *urlAPI, size_t nivelDifucultad
     return 1;
 }
 
+void cargarDificultad(tJuego *lista){
+    int nivel=0;
+    printf("\nIngrese nivel de dificultad\n1:Baja \n2:Media \n3:Alta\n");
+    nivel=obtenerRespuestaDeTecladoEntre('1','3');
+    lista->nivelEligido=nivel-'0';
+}
+
 void parsearPregunta ( tPregunta *destinoPregun, cJSON *origen )
 {
     cJSON *valor;
     valor = cJSON_GetObjectItem( origen, "pregunta" );
-    strcpy( destinoPregun->pregunta, valor->valuestring );
+    strcpy( destinoPregun->pregunta, valor->valuestring+1 );
     valor = cJSON_GetObjectItem( origen, "resp_correcta" );
     strcpy( (destinoPregun->opciones)[0], valor->valuestring);
     valor = cJSON_GetObjectItem( origen, "opcion_1" );
-    strcpy( (destinoPregun->opciones)[1], valor->valuestring );
+    strcpy( (destinoPregun->opciones)[1], valor->valuestring);
     valor = cJSON_GetObjectItem( origen, "opcion_2" );
     strcpy( (destinoPregun->opciones)[2], valor->valuestring);
     valor = cJSON_GetObjectItem( origen, "opcion_3" );
@@ -267,22 +272,51 @@ int calcularResultadosYimprimir(tJuego *juego){
     system("cls");
 
     puts("resultados.");
-    printf("preguntas / jugadores:                   ");
+    printf("preguntas / jugadores:                                                            ");
     mapListaC(&juego->listaJugadores,imprimirJugador,stdout);
     puts("");
     mapLista(&juego->listaPreguntas,mostrarPreguntaYimprimirRespuesta,NULL);
 
-    printf("puntajes totales:                        ");   ///puntajes totales ,despues lo veo
+    printf("puntajes totales:                                                        ");   ///puntajes totales ,despues lo veo
     mapListaC(&juego->listaJugadores,imprimirPuntajeTotalJugador,stdout);
     printf("\nganadores:");
     mapListaC(&juego->listaJugadores,obtenerMaximaPuntuacion,&(c.maximaPuntuacion) );
     mapListaC(&juego->listaJugadores,imprimirGanadores,&(c.maximaPuntuacion));
 
+    generarInforme(juego,(c.maximaPuntuacion));
+
     return TODO_OK;
 }
 
 void cerrarJuego(tJuego *juego){
+    puts("\ncerrando juego...");
     vaciarListaC(&juego->listaJugadores);
     mapLista(&juego->listaPreguntas,vaciarRespuestas,NULL);
     vaciarLista(&juego->listaPreguntas);
 }
+
+int menu(){
+    char eleccion;
+    printf("\n[A] Jugar\n[B] Salir\n");
+    eleccion=obtenerRespuestaDeTecladoEntre('A','B');
+    if(eleccion=='B')
+        return 0;
+    return 1;
+}
+
+void generarInforme(tJuego*juego,int puntuacioMax){
+    FILE*pa=fopen("informe.txt","wt");
+    if (pa == NULL) {
+        perror("Error al abrir el archivo");
+        return;
+    }
+    mapLista(&juego->listaPreguntas,imprimirEnArchivoPregunta,pa);
+    fprintf(pa,"Respuestas Jugadores:");
+    mapLista(&juego->listaPreguntas,puntosPorPreguntaParaArchivo,pa);
+    mapListaC(&juego->listaJugadores,imprimirJugadorEnArchivo,pa);
+    ganadoresEnArchivo(&juego->listaJugadores,pa,puntuacioMax);
+
+    fclose(pa);
+}
+
+
