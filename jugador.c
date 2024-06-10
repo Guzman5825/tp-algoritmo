@@ -41,7 +41,7 @@ int ModificarElOrdenJugador( void* n, void* d){
 int imprimirJugador ( void* dato, void *stream )
 {
     tJugador *jugador = (tJugador*)dato;
-    fprintf((FILE*)stream,"%-10.10s   ", jugador->nombre);
+    fprintf((FILE*)stream,"%-20.20s", jugador->nombre);
     return 1;
 }
 

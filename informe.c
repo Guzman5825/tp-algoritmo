@@ -14,19 +14,26 @@ int imprimirEnArchivoPregunta(void*preg,void*pa){
 
 int puntosPorPreguntaParaArchivo(void*preg,void*pa){
     tPregunta*pregunta=(tPregunta*)preg;
-    FILE *archivo = (FILE *)pa;
-    fprintf(archivo, "\nRespuesta de la pregunta N°%d:", pregunta->orden+1);
+    tContexto *c=pa;
+    fprintf(c->archivo, "\nRespuesta de la pregunta N°%d:", pregunta->orden+1);
     mapListaC(&pregunta->respuestas,imprimirPuntosPorPreguntaEnArchivo,pa);
     return 1;
 }
 
 int imprimirPuntosPorPreguntaEnArchivo(void*elem,void*pa){
     tRespuesta*resp=(tRespuesta*)elem;
-    FILE *archivo = (FILE *)pa;
-    fprintf(archivo, "\nJugador Nro %d\t", resp->ordenJugador);
-    fprintf(archivo, "respuesta %c\t", resp->respuesta);
-    fprintf(archivo, "puntos %d\t", resp->puntaje);
-    fprintf(archivo, "tiempo en responder %d segundos", resp->tiempo);
+    tContexto *c=pa;
+    tJugador j;
+    j.orden=resp->ordenJugador;
+
+    //fprintf(c->archivo, "\nJugador Nro %d\t:", resp->ordenJugador+1);
+    fprintf(c->archivo, "\nJugador ");
+    buscarPorClaveYaccionarEnListaC(&c->jugadores,&j,sizeof(tJugador),cmpJugadorXOrdenMenAMay,
+                                    c->archivo,imprimirJugador);
+
+    fprintf(c->archivo, "respuesta %c\t", resp->respuesta);
+    fprintf(c->archivo, "puntos %d\t", resp->puntaje);
+    fprintf(c->archivo, "tiempo en responder %d segundos", resp->tiempo);
     return 1;
 }
 

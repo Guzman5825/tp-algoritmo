@@ -337,7 +337,7 @@ void generarInforme(tJuego*juego,tContexto *c){
 
     mapLista(&juego->listaPreguntas,imprimirEnArchivoPregunta,pa);
     fprintf(pa,"Respuestas Jugadores:");
-    mapLista(&juego->listaPreguntas,puntosPorPreguntaParaArchivo,pa);
+    mapLista(&juego->listaPreguntas,puntosPorPreguntaParaArchivo,c);
     mapListaC(&juego->listaJugadores,imprimirJugadorEnArchivo,pa);
     ganadoresEnArchivo(&juego->listaJugadores,pa,c->maximaPuntuacion);
 
