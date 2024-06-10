@@ -17,8 +17,8 @@
 #include "respuesta.h"
 #include "informe.h"
 #include "archivo.h"
-#define MAX_CANT_JUGADORES 100
-#define MAX_CANT_RONDAS 100
+
+#define nivelAtexto(x) ( x==1 ? "FACIL" : (x==2? "MEDIO":"DIFICIL" ) )
 
 typedef struct{
     t_Lista listaPreguntas;
@@ -27,7 +27,6 @@ typedef struct{
     int nivelEligido;
     int tiempoLimite;
     int cantRondas;
-    tRespuesta respuestas[MAX_CANT_JUGADORES][MAX_CANT_RONDAS];
     int jugadorActual;
 }tJuego;
 
@@ -61,6 +60,6 @@ void parsearPregunta ( tPregunta *destinoPregun, cJSON *origen );
 int iniciarJuego(tJuego *juego);
 int calcularResultadosYimprimir(tJuego *juego);
 void cerrarJuego(tJuego *juego);
-void generarInforme(tJuego*juego,tContexto *c);
+void generarInforme(tJuego*juego,tContexto *c,tJuego *j);
 
 #endif // JUEGO_H_INCLUDED

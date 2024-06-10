@@ -296,17 +296,6 @@ int calcularResultadosYimprimir(tJuego *juego){
     c.maximaPuntuacion=INT_MIN;
 
     mapLista(&juego->listaPreguntas,calcularPuntajesDeTodasRespuestas,&c);
-    system("cls");
-/*
-    puts("resultados.");
-    printf("preguntas / jugadores:                                                            ");
-    mapListaC(&juego->listaJugadores,imprimirJugador,stdout);
-    puts("");
-    mapLista(&juego->listaPreguntas,mostrarPreguntaYimprimirRespuesta,NULL);
-
-    printf("puntajes totales:                                                        ");   ///puntajes totales ,despues lo veo
-    mapListaC(&juego->listaJugadores,imprimirPuntajeTotalJugador,stdout);
-*/
 
     system("cls");
     puts("juego terminado , ingrese cualquier tecla para mostrar el/los ganador/ganadores");
@@ -318,7 +307,7 @@ int calcularResultadosYimprimir(tJuego *juego){
     mapListaC(&juego->listaJugadores,imprimirGanadores,&(c.maximaPuntuacion));
     printf("\npuntuacion ganadora: %d\n",c.maximaPuntuacion);
     puts("para mas detalle lea el informe generado...");
-    generarInforme(juego,&c);
+    generarInforme(juego,&c,juego);
     puts("ingrese cualquier tecla para finalizar la partida");
     getch();
     return TODO_OK;
@@ -341,7 +330,7 @@ int menu(){
     return 1;
 }
 
-void generarInforme(tJuego*juego,tContexto *c){
+void generarInforme(tJuego*juego,tContexto *c,tJuego *j){
     char nombreArchivo[100];
     obtenerNombreDeArchivoConFecha(nombreArchivo,sizeof(nombreArchivo));
     FILE*pa=fopen(nombreArchivo,"wt");
@@ -351,14 +340,23 @@ void generarInforme(tJuego*juego,tContexto *c){
     }
     c->archivo=pa;
 
+    fprintf(pa,"condiciones del juego:\n");
+    fprintf(pa,"-cantidad de jugadores:%d\n",(int)j->cantJug);
+    fprintf(pa,"-cantidad de preguntas:%d\n",(int)j->cantRondas);
+    fprintf(pa,"-dificultad elegida:");
+    fprintf(pa,nivelAtexto(j->nivelEligido) );
+    fprintf(pa,"\n");
+    fprintf(pa,"-tiempo limite por pregunta: %d segundos\n",j->tiempoLimite);
+
+    fprintf(pa,"\nPreguntas:\n");
     mapLista(&juego->listaPreguntas,imprimirEnArchivoPregunta,pa);
-    fprintf(pa,"Respuestas Jugadores:\n");
+    fprintf(pa,"\nRespuestas Jugadores:\n");
     mapLista(&juego->listaPreguntas,puntosPorPreguntaParaArchivo,c);
-    fprintf(pa,"puntajes Totales de cada Jugador:\n");
+    fprintf(pa,"\nPuntajes Totales de cada Jugador:\n");
     mapListaC(&juego->listaJugadores,imprimirJugadorEnArchivo,pa);
-    fprintf(pa,"ganadores/ganadores:\n");
+    fprintf(pa,"\nGanadores/ganadores:\n");
     ganadoresEnArchivo(&juego->listaJugadores,pa,c->maximaPuntuacion);
-    fprintf(pa,"puntaje ganador:%d\n",c->maximaPuntuacion);
+    fprintf(pa,"Puntaje ganador:%d\n",c->maximaPuntuacion);
     fclose(pa);
 }
 
