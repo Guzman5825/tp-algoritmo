@@ -8,8 +8,8 @@
 #include "lista_simple.h"
 #include "respuesta.h"
 #define MAX_OPCIONES 4
-#define MAX_CARACTERES_PREGUNTA 90//ojo con este maximo depende de las preguntas
-#define MAX_CARACTERES_OPCIONES 80 //lo mismo este si se rompe tal vez es por que no tiene suficiente espacio
+#define MAX_CARACTERES_PREGUNTA 101//ojo con este maximo depende de las preguntas
+#define MAX_CARACTERES_OPCIONES 101 //lo mismo este si se rompe tal vez es por que no tiene suficiente espacio
 
 typedef struct
 {

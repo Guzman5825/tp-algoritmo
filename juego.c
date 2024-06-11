@@ -12,9 +12,15 @@ void crearJuego(tJuego* juego){
 
 int cargarJuego(tJuego* juego){
 
-    cargarConfiguracionDeTxt(&juego->tiempoLimite,&juego->cantRondas);
+    if(!cargarConfiguracionDeTxt(&juego->tiempoLimite,&juego->cantRondas)){
+        puts("ingrese cualquier tecla para continuar...");
+        getch();
 
-    cargarJugadores(juego);
+        return 0;
+    }
+
+
+    cargarJugadores(juego); ///que sea al menos un jugador
     if(juego->cantJug==0){
         puts("no se han ingresado jugadores");
         return 0;
@@ -36,6 +42,7 @@ int cargarJugadores ( tJuego *juego )
     tJugador jugador={"",0,0};
     char nombreLargo[2000];
     t_Lista jugadores;
+    int orden=0;
 
     crearLista(&jugadores);
 
@@ -44,7 +51,7 @@ int cargarJugadores ( tJuego *juego )
 
     obtenerTextoNoVacioDeTeclado(nombreLargo);
     strncpy(jugador.nombre, nombreLargo, 20);
-    jugador.nombre[20]='\0';
+    jugador.nombre[20]='\0';    /// validar cantidad jugadores
 
     while( strcmpi( "FIN", jugador.nombre ) != 0 )
     {
@@ -59,13 +66,12 @@ int cargarJugadores ( tJuego *juego )
 
 
     while(!listaVacia(&jugadores)){
-        verDatoDeListaEnPos(&jugadores,&jugador,sizeof(tJugador),0);
+        verDatoDeListaEnPos(&jugadores,&jugador,sizeof(tJugador),0);    //sacar lista posicion 0
         eliminarDeListaEnPos(&jugadores,0);
+        jugador.orden=orden;
         insertarEnSiguiente(&juego->listaJugadores,&jugador,sizeof(tJugador));
+        orden++;
     }
-
-    int orden=0;
-    mapListaC(&juego->listaJugadores,ModificarElOrdenJugador,&orden);
 
     return TODO_OK;
 }
@@ -134,13 +140,14 @@ int cargarPreguntas ( t_Lista *lista, const char *urlAPI, size_t nivelDifucultad
             aleatorizarRespuestaCorrecta( &pregunta );
             crearListaC(&(pregunta.respuestas)); //dado que siempre se usara esto para crear la listas de preguntas
             insertarEnListaOrdenadoConDuplicado( lista, &pregunta, sizeof(tPregunta),cmpOrdenPregunta);
+            ///cantidad de elementos
         }
     }
 
     cJSON_Delete( jsonPreguntas );//liberamos el cjson, tiene una implementacion con memoria dinamica
     curl_easy_cleanup( curl ); //terminamos la solicitud
 
-    cantElem = lista_Filter(lista, filtraXDificultad, &nivelDifucultad);    //esto hay que cambiar ya que esta filtrdo
+    cantElem = lista_Filter(lista, filtraXDificultad, &nivelDifucultad);    ///eliminarlo despues
     while( cantElem > cantRaunds )
     {
         eliminarDeListaEnPos( lista, (rand()+95) % cantElem );//elimino cualquiera hasta tener la cantidad correcta
@@ -152,7 +159,7 @@ int cargarPreguntas ( t_Lista *lista, const char *urlAPI, size_t nivelDifucultad
     return 1;
 }
 
-void cargarDificultad(tJuego *lista){
+void cargarDificultad(tJuego *lista){   ///retornar un numero de dificultad
     int nivel=0;
     system("cls");
     printf("Ingrese nivel de dificultad\n1:Baja \n2:Media \n3:Alta\n");
@@ -242,6 +249,7 @@ int iniciarJuego(tJuego *juego){
 
     juego->jugadorActual=0;
     mapListaC(&juego->listaJugadores,juegaJugador,juego);
+
     mapLista(&juego->listaPreguntas,ordenarPosiciones,NULL);    //para que la lista circular apunte al primer turno y quede un paralalismo
 
     return TODO_OK;
@@ -256,7 +264,8 @@ int calcularPuntajeDeRespuesta(void* d, void* d2){
 
     tJugador j;
     j.orden=respuesta->ordenJugador;
-    buscarPorClaveYaccionarEnListaC(&c->jugadores,&j,sizeof(tJugador),cmpJugadorXOrdenMenAMay,&respuesta->puntaje,sumarPuntos);
+    buscarPorClaveYaccionarEnListaC(&c->jugadores,&j,sizeof(tJugador),cmpJugadorXOrdenMenAMay,
+                                    &respuesta->puntaje,sumarPuntos);
 
     return 1;
 }
@@ -281,7 +290,7 @@ int calcularPuntajesDeTodasRespuestas(void* d, void* d2){
     tPregunta* pregunta =d;
     tContexto* c=d2;
     c->respuestaCorrecta=pregunta->opcionCorrecta;
-    c->mejorTiempo=100000;
+    c->mejorTiempo=INT_MAX;
 
     mapListaC(&pregunta->respuestas,mejorTiempoValido,c);
     mapListaC(&pregunta->respuestas,calcularPuntajeDeRespuesta,c);
