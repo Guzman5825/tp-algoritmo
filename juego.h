@@ -50,12 +50,11 @@ typedef struct
 tContexto;
 
 int menu();
-
 void crearJuego(tJuego *juego);
 int cargarJuego(tJuego *juego);
-int cargarJugadores ( tJuego *lista );
+int cargarJugadores ( tListaC* listaJugadores,size_t * cantJug );
 int cargarPreguntas ( t_Lista *lista, const char *urlAPI, size_t nivelDificultad, size_t cantRaunds );
-void cargarDificultad(tJuego *lista);
+void cargarDificultad(int *nivelElegido);
 void parsearPregunta ( tPregunta *destinoPregun, cJSON *origen );
 int iniciarJuego(tJuego *juego);
 int calcularResultadosYimprimir(tJuego *juego);

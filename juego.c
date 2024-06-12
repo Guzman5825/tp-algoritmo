@@ -19,14 +19,9 @@ int cargarJuego(tJuego* juego){
         return 0;
     }
 
+    cargarJugadores(&juego->listaJugadores,&juego->cantJug);
 
-    cargarJugadores(juego); ///que sea al menos un jugador
-    if(juego->cantJug==0){
-        puts("no se han ingresado jugadores");
-        return 0;
-    }
-
-    cargarDificultad(juego);
+    cargarDificultad(&juego->nivelEligido);
 
     system("cls");
     puts("\ncargando preguntas...");
@@ -37,7 +32,7 @@ int cargarJuego(tJuego* juego){
     return 1;
 }
 
-int cargarJugadores ( tJuego *juego )
+int cargarJugadores ( tListaC* listaJugadores,size_t * cantJug )
 {
     tJugador jugador={"",0,0};
     char nombreLargo[2000];
@@ -47,29 +42,24 @@ int cargarJugadores ( tJuego *juego )
     crearLista(&jugadores);
 
     system("cls");
-    puts("Ingrese el nombre de un jugador o FIN si ya ingreso todos los nombres. no mas de 20 caracteres por nombre");
+    puts("Ingrese el nombre de un jugador. no mas de 20 caracteres por nombre");
 
-    obtenerTextoNoVacioDeTeclado(nombreLargo);
-    strncpy(jugador.nombre, nombreLargo, 20);
-    jugador.nombre[20]='\0';    /// validar cantidad jugadores
+    obtenerTextoNoVacioDeTecladoYLimitado(nombreLargo,20);
 
-    while( strcmpi( "FIN", jugador.nombre ) != 0 )
+    while( *cantJug==0 || strcmpi( "FIN", nombreLargo ) != 0 )
     {
+        strcpy(jugador.nombre,nombreLargo);
         jugador.orden = rand();
         insertarEnListaOrdenadoConDuplicado( &jugadores, &jugador, sizeof( tJugador ),cmpJugadorXOrdenMenAMay );
-        juego->cantJug++;
-        puts("Ingrese el nombre de un jugador");
-        obtenerTextoNoVacioDeTeclado(nombreLargo);
-        strncpy(jugador.nombre, nombreLargo, 20);
-        jugador.nombre[20]='\0';
+        (*cantJug)++;
+        puts("Ingrese el nombre de un jugador o FIN si ya ingreso todos los nombres. no mas de 20 caracteres por nombre");
+        obtenerTextoNoVacioDeTecladoYLimitado(nombreLargo,20);
     }
 
-
     while(!listaVacia(&jugadores)){
-        verDatoDeListaEnPos(&jugadores,&jugador,sizeof(tJugador),0);    //sacar lista posicion 0
-        eliminarDeListaEnPos(&jugadores,0);
+        sacarDeListaEnPos(&jugadores,&jugador,sizeof(tJugador),0);
         jugador.orden=orden;
-        insertarEnSiguiente(&juego->listaJugadores,&jugador,sizeof(tJugador));
+        insertarEnSiguiente(listaJugadores,&jugador,sizeof(tJugador));
         orden++;
     }
 
@@ -109,7 +99,9 @@ int cargarPreguntas ( t_Lista *lista, const char *urlAPI, size_t nivelDifucultad
     cJSON *jsonPreguntas;
     tJsontxt jsonRes;
     tPregunta pregunta;
-    int i, cantElem;
+    int i, cantElem=0;
+
+    crearListaC(&(pregunta.respuestas)); //dado que siempre se usara esto para crear la listas de preguntas
 
     if( ! inicializarJsonTxt( &jsonRes )  )
         return 0;//No tengo donde almacenar la respuesta
@@ -138,33 +130,33 @@ int cargarPreguntas ( t_Lista *lista, const char *urlAPI, size_t nivelDifucultad
         if(pregunta.dificultad==nivelDifucultad){
             pregunta.orden=rand();
             aleatorizarRespuestaCorrecta( &pregunta );
-            crearListaC(&(pregunta.respuestas)); //dado que siempre se usara esto para crear la listas de preguntas
             insertarEnListaOrdenadoConDuplicado( lista, &pregunta, sizeof(tPregunta),cmpOrdenPregunta);
-            ///cantidad de elementos
+            cantElem++;
         }
     }
 
     cJSON_Delete( jsonPreguntas );//liberamos el cjson, tiene una implementacion con memoria dinamica
     curl_easy_cleanup( curl ); //terminamos la solicitud
 
-    cantElem = lista_Filter(lista, filtraXDificultad, &nivelDifucultad);    ///eliminarlo despues
     while( cantElem > cantRaunds )
     {
-        eliminarDeListaEnPos( lista, (rand()+95) % cantElem );//elimino cualquiera hasta tener la cantidad correcta
+        eliminarDeListaEnPos(lista,0); //elimino los primeros, total la probabilidad sigue siendo la misma
         cantElem--;
     }
+
     int orden=0;
     mapLista(lista,ModificarElOrdenPregunta,&orden);
     fflush(stdin);
+
     return 1;
 }
 
-void cargarDificultad(tJuego *lista){   ///retornar un numero de dificultad
+void cargarDificultad(int *nivelElegido){
     int nivel=0;
     system("cls");
     printf("Ingrese nivel de dificultad\n1:Baja \n2:Media \n3:Alta\n");
     nivel=obtenerRespuestaDeTecladoEntre('1','3');
-    lista->nivelEligido=nivel-'0';
+    *nivelElegido=nivel-'0';
 }
 
 void parsearPregunta ( tPregunta *destinoPregun, cJSON *origen )
@@ -195,7 +187,7 @@ int contestarPregunta(void* d, void* d2){
     verOpcionesPreguntas(pregunta);
 
     obtenerRespuestaDeTecladoTemporizado(&(respuesta.respuesta),&tiempoTranscurrido,juego->tiempoLimite);
-    respuesta.tiempo=(int)tiempoTranscurrido; //solo se queda con la parte ententera del double
+    respuesta.tiempo=(int)tiempoTranscurrido;
 
     printf("Su respuesta es %c y tardo %2d segundos \n",respuesta.respuesta,respuesta.tiempo);
 
@@ -207,7 +199,7 @@ int contestarPregunta(void* d, void* d2){
 int juegaJugador(void* d, void* d2){
     tJugador *jugador=d;
     tJuego *juego=d2;
-
+    juego->jugadorActual=jugador->orden;        ///le envio el orden para que luego la pregunta pueda tener el orden
     //limpiar pantalla
     system("cls");
     printf("ahora es el turno del jugador: %s\n", jugador->nombre);
@@ -222,7 +214,6 @@ int juegaJugador(void* d, void* d2){
     getch();
     system("cls");
 
-    juego->jugadorActual++;
     return 1;
 }
 
@@ -237,7 +228,6 @@ int ordenarPosiciones(void* d, void* d2){
 
 
 int iniciarJuego(tJuego *juego){
-    ///mostrar Lista de Jugadores y orden en como lo responde    !!!!!!!!!!!!!!!
     system("cls");
     puts("INFORMACION PARA JUGAR");
     puts("orden de los jugadores:");
@@ -247,7 +237,6 @@ int iniciarJuego(tJuego *juego){
     puts("ingrese cualquier tecla para continuar...");
     getch();
 
-    juego->jugadorActual=0;
     mapListaC(&juego->listaJugadores,juegaJugador,juego);
 
     mapLista(&juego->listaPreguntas,ordenarPosiciones,NULL);    //para que la lista circular apunte al primer turno y quede un paralalismo
@@ -368,5 +357,3 @@ void generarInforme(tJuego*juego,tContexto *c,tJuego *j){
     fprintf(pa,"Puntaje ganador:%d\n",c->maximaPuntuacion);
     fclose(pa);
 }
-
-

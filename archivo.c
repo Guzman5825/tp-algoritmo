@@ -18,8 +18,8 @@ int cargarConfiguracionDeTxt(int* tiempoLimite,int* cantRondas){
 
     fclose(pfConfig);
 
-    if(*cantRondas>33 || *cantRondas<1){    //modificar para que sea entre 4-7 incluido
-        puts("Error: cantidad de rondas, supero el limite permitido, ingrese un cantidad menor 34 y mayor a 0");
+    if(*cantRondas<4 || *cantRondas>7){
+        puts("Error: cantidad de rondas, supero el limite permitido, ingrese un cantidad mayor 4 a 7 rondas");
         return ERROR;
     }
 
