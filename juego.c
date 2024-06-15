@@ -35,25 +35,17 @@ int cargarJuego(tJuego* juego){
 int cargarJugadores ( tListaC* listaJugadores,size_t * cantJug )
 {
     tJugador jugador={"",0,0};
-    char nombreLargo[2000];
     t_Lista jugadores;
     int orden=0;
 
     crearLista(&jugadores);
 
     system("cls");
-    puts("Ingrese el nombre de un jugador. no mas de 20 caracteres por nombre");
-
-    obtenerTextoNoVacioDeTecladoYLimitado(nombreLargo,20);
-
-    while( *cantJug==0 || strcmpi( "FIN", nombreLargo ) != 0 )
+    *cantJug = solicitarJugadores(&jugadores);
+    while( *cantJug == 0 )
     {
-        strcpy(jugador.nombre,nombreLargo);
-        jugador.orden = rand();
-        insertarEnListaOrdenadoConDuplicado( &jugadores, &jugador, sizeof( tJugador ),cmpJugadorXOrdenMenAMay );
-        (*cantJug)++;
-        puts("Ingrese el nombre de un jugador o FIN si ya ingreso todos los nombres. no mas de 20 caracteres por nombre");
-        obtenerTextoNoVacioDeTecladoYLimitado(nombreLargo,20);
+        puts("No ah registrado jugadores, por favor ingrese al menos un jugador");
+        *cantJug = solicitarJugadores(&jugadores);
     }
 
     while(!listaVacia(&jugadores)){
@@ -64,6 +56,26 @@ int cargarJugadores ( tListaC* listaJugadores,size_t * cantJug )
     }
 
     return TODO_OK;
+}
+
+size_t solicitarJugadores (t_Lista *lista)
+{
+    tJugador jugador={"",0,0};
+    size_t cantJug = 0;
+
+    printf("Ingrese el nombre de un jugador de hasta %d caracteres o FIN si ya ingreso todos los nombres!!!!\n",MAX_CARACTERES_NOMBRE -1);
+
+    obtenerTextoNoVacioDeTecladoYLimitado(jugador.nombre,MAX_CARACTERES_NOMBRE);
+
+    while( strcmpi( "FIN", jugador.nombre ) != 0  )
+    {
+        jugador.orden = rand();
+        insertarEnListaOrdenadoConDuplicado(lista, &jugador, sizeof( tJugador ),cmpJugadorXOrdenMenAMay );
+        cantJug++;
+        printf("Ingrese el nombre de un jugador de hasta %d caracteres o FIN si ya ingreso todos los nombres!!!!\n",MAX_CARACTERES_NOMBRE -1);
+        obtenerTextoNoVacioDeTecladoYLimitado(jugador.nombre,MAX_CARACTERES_NOMBRE);
+    }
+    return cantJug;
 }
 
 static size_t write_callback(void *respuesta, size_t tamDatos, size_t cantDatos, tJsontxt *datosUsuario) {

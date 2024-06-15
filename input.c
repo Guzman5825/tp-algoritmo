@@ -27,18 +27,18 @@ char obtenerRespuestaDeTecladoEntre(char letraMenor,char letraMayor){
 }
 
 int obtenerTextoNoVacioDeTecladoYLimitado(char* TextoDestino,int limiteCaracter){
+    char *p;
     if(TextoDestino==NULL)
         return 0;
-
     do{
         fflush(stdin);
-        gets(TextoDestino);
-        if(*TextoDestino=='\0')
+        fgets( TextoDestino, limiteCaracter, stdin );
+        if(*TextoDestino=='\n')
             puts("no se permite texto vacio, ingrese un texto valido...");
-    }while(*TextoDestino=='\0');
-
-    TextoDestino[limiteCaracter]='\0';
-
+    }while(*TextoDestino=='\n');
+    p=strchr(TextoDestino,'\n');
+    if(*p=='\n')
+        *p='\0';
     return 1;
 }
 

@@ -18,6 +18,7 @@
 #include "informe.h"
 #include "archivo.h"
 
+#define MAX_CARACTERES_NOMBRE 20
 #define nivelAtexto(x) ( x==1 ? "FACIL" : (x==2? "MEDIO":"DIFICIL" ) )
 
 typedef struct{
@@ -53,6 +54,7 @@ int menu();
 void crearJuego(tJuego *juego);
 int cargarJuego(tJuego *juego);
 int cargarJugadores ( tListaC* listaJugadores,size_t * cantJug );
+size_t solicitarJugadores (t_Lista *lista);
 int cargarPreguntas ( t_Lista *lista, const char *urlAPI, size_t nivelDificultad, size_t cantRaunds );
 void cargarDificultad(int *nivelElegido);
 void parsearPregunta ( tPregunta *destinoPregun, cJSON *origen );
