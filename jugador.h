@@ -2,12 +2,12 @@
 #define JUGADOR_H_INCLUDED
 
 #include <stdio.h>
-#define MAX_CADENA 30
 #define MAX_TRIVIAS 101
+#define MAX_CARACTERES_NOMBRE 20
 
 typedef struct
 {
-    char nombre [MAX_CADENA];
+    char nombre [MAX_CARACTERES_NOMBRE+1];
     int orden;
     int puntajeTotal;
 }

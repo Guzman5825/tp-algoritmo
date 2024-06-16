@@ -18,7 +18,9 @@
 #include "informe.h"
 #include "archivo.h"
 
-#define MAX_CARACTERES_NOMBRE 20
+#define MAX_NOMBRE_ARCH 100
+#define ERROR_CARGA 0
+#define TODO_OK 1
 #define nivelAtexto(x) ( x==1 ? "FACIL" : (x==2? "MEDIO":"DIFICIL" ) )
 
 typedef struct{

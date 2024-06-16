@@ -37,7 +37,7 @@ int obtenerTextoNoVacioDeTecladoYLimitado(char* TextoDestino,int limiteCaracter)
             puts("no se permite texto vacio, ingrese un texto valido...");
     }while(*TextoDestino=='\n');
     p=strchr(TextoDestino,'\n');
-    if(*p=='\n')
+    if(p!=NULL && *p=='\n')
         *p='\0';
     return 1;
 }

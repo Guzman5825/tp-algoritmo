@@ -1,13 +1,5 @@
 #include "pregunta.h"
 
-int mostrarPreguntaYimprimirRespuesta(void* d, void* d2){
-    tPregunta *p=d;
-    printf("%-70.70s : resp=%c :",p->pregunta,p->opcionCorrecta);
-    mapListaC(&p->respuestas,mostrarRespuesta,NULL);
-    puts("");
-    return 1;
-}
-
 void verOpcionesPreguntas (const tPregunta *pre )
 {
     size_t i;

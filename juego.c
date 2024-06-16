@@ -15,8 +15,7 @@ int cargarJuego(tJuego* juego){
     if(!cargarConfiguracionDeTxt(&juego->tiempoLimite,&juego->cantRondas)){
         puts("ingrese cualquier tecla para continuar...");
         getch();
-
-        return 0;
+        return ERROR_CARGA;
     }
 
     cargarJugadores(&juego->listaJugadores,&juego->cantJug);
@@ -26,10 +25,14 @@ int cargarJuego(tJuego* juego){
     system("cls");
     puts("\ncargando preguntas...");
 
-    cargarPreguntas( &juego->listaPreguntas, "https://664d06f4ede9a2b5565273e6.mockapi.io/PREGUNTAS",
-                     juego->nivelEligido, juego->cantRondas );
+    if(!cargarPreguntas( &juego->listaPreguntas, "https://664d06f4ede9a2b5565273e6.mockapi.io/PREGUNTAS",
+                     juego->nivelEligido, juego->cantRondas )){
+        puts("ingrese cualquier tecla para continuar...");
+        getch();
+        return ERROR_CARGA;
+        }
 
-    return 1;
+    return TODO_OK;
 }
 
 int cargarJugadores ( tListaC* listaJugadores,size_t * cantJug )
@@ -63,7 +66,7 @@ size_t solicitarJugadores (t_Lista *lista)
     tJugador jugador={"",0,0};
     size_t cantJug = 0;
 
-    printf("Ingrese el nombre de un jugador de hasta %d caracteres o FIN si ya ingreso todos los nombres!!!!\n",MAX_CARACTERES_NOMBRE -1);
+    printf("Ingrese el nombre de un jugador de hasta %d caracteres o FIN si ya ingreso todos los nombres!!!!\n",MAX_CARACTERES_NOMBRE);
 
     obtenerTextoNoVacioDeTecladoYLimitado(jugador.nombre,MAX_CARACTERES_NOMBRE);
 
@@ -72,12 +75,13 @@ size_t solicitarJugadores (t_Lista *lista)
         jugador.orden = rand();
         insertarEnListaOrdenadoConDuplicado(lista, &jugador, sizeof( tJugador ),cmpJugadorXOrdenMenAMay );
         cantJug++;
-        printf("Ingrese el nombre de un jugador de hasta %d caracteres o FIN si ya ingreso todos los nombres!!!!\n",MAX_CARACTERES_NOMBRE -1);
+        printf("Ingrese el nombre de un jugador de hasta %d caracteres o FIN si ya ingreso todos los nombres!!!!\n",MAX_CARACTERES_NOMBRE);
         obtenerTextoNoVacioDeTecladoYLimitado(jugador.nombre,MAX_CARACTERES_NOMBRE);
     }
     return cantJug;
 }
 
+///dado que envia por partes ,entonces se llama esta funcion varias veces hasta que cargue toda la informacion
 static size_t write_callback(void *respuesta, size_t tamDatos, size_t cantDatos, tJsontxt *datosUsuario) {
 
     size_t tamNuevo = tamDatos * cantDatos ;
@@ -115,8 +119,11 @@ int cargarPreguntas ( t_Lista *lista, const char *urlAPI, size_t nivelDifucultad
 
     crearListaC(&(pregunta.respuestas)); //dado que siempre se usara esto para crear la listas de preguntas
 
-    if( ! inicializarJsonTxt( &jsonRes )  )
+    if( ! inicializarJsonTxt( &jsonRes )  ){
+        puts("error de inicializcion de json");
         return 0;//No tengo donde almacenar la respuesta
+    }
+
 
     curl = curl_easy_init();
     if( ! curl )
@@ -160,7 +167,7 @@ int cargarPreguntas ( t_Lista *lista, const char *urlAPI, size_t nivelDifucultad
     mapLista(lista,ModificarElOrdenPregunta,&orden);
     fflush(stdin);
 
-    return 1;
+    return TODO_OK;
 }
 
 void cargarDificultad(int *nivelElegido){
@@ -205,7 +212,7 @@ int contestarPregunta(void* d, void* d2){
 
     insertarEnSiguiente(&pregunta->respuestas,&respuesta,sizeof(respuesta));
 
-    return 1;
+    return TODO_OK;
 }
 
 int juegaJugador(void* d, void* d2){
@@ -226,7 +233,7 @@ int juegaJugador(void* d, void* d2){
     getch();
     system("cls");
 
-    return 1;
+    return TODO_OK;
 }
 
 int ordenarPosiciones(void* d, void* d2){
@@ -234,7 +241,7 @@ int ordenarPosiciones(void* d, void* d2){
     tRespuesta resp;
     resp.ordenJugador=0;
     buscarPorClaveYaccionarEnListaC(&pregunta->respuestas,&resp,sizeof(tRespuesta),cmpOrdenJugador,NULL,NULL);
-    return 1;
+    return TODO_OK;
 }
 
 
@@ -268,7 +275,7 @@ int calcularPuntajeDeRespuesta(void* d, void* d2){
     buscarPorClaveYaccionarEnListaC(&c->jugadores,&j,sizeof(tJugador),cmpJugadorXOrdenMenAMay,
                                     &respuesta->puntaje,sumarPuntos);
 
-    return 1;
+    return TODO_OK;
 }
 
 int mejorTiempoValido(void* d, void* d2){
@@ -284,7 +291,7 @@ int mejorTiempoValido(void* d, void* d2){
         }
     }
 
-    return 1;
+    return TODO_OK;
 }
 
 int calcularPuntajesDeTodasRespuestas(void* d, void* d2){
@@ -296,7 +303,7 @@ int calcularPuntajesDeTodasRespuestas(void* d, void* d2){
     mapListaC(&pregunta->respuestas,mejorTiempoValido,c);
     mapListaC(&pregunta->respuestas,calcularPuntajeDeRespuesta,c);
 
-    return 1;
+    return TODO_OK;
 }
 
 int calcularResultadosYimprimir(tJuego *juego){
@@ -337,11 +344,11 @@ int menu(){
     eleccion=obtenerRespuestaDeTecladoEntre('A','B');
     if(eleccion=='B')
         return 0;
-    return 1;
+    return TODO_OK;
 }
 
 void generarInforme(tJuego*juego,tContexto *c,tJuego *j){
-    char nombreArchivo[100];
+    char nombreArchivo[MAX_NOMBRE_ARCH];
     obtenerNombreDeArchivoConFecha(nombreArchivo,sizeof(nombreArchivo));
     FILE*pa=fopen(nombreArchivo,"wt");
     if (pa == NULL) {

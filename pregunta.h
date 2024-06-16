@@ -8,8 +8,8 @@
 #include "lista_simple.h"
 #include "respuesta.h"
 #define MAX_OPCIONES 4
-#define MAX_CARACTERES_PREGUNTA 101//ojo con este maximo depende de las preguntas
-#define MAX_CARACTERES_OPCIONES 101 //lo mismo este si se rompe tal vez es por que no tiene suficiente espacio
+#define MAX_CARACTERES_PREGUNTA 300//ojo con este maximo depende de las preguntas
+#define MAX_CARACTERES_OPCIONES 200 //lo mismo este si se rompe tal vez es por que no tiene suficiente espacio
 
 typedef struct
 {
@@ -22,7 +22,6 @@ typedef struct
 }
 tPregunta;
 
-int mostrarPreguntaYimprimirRespuesta(void* d, void* d2);
 void verOpcionesPreguntas (const tPregunta *pre );
 int filtraXDificultad ( const void *dato1, const void *dato2 );
 void aleatorizarRespuestaCorrecta ( tPregunta *pre );
