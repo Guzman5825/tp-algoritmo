@@ -4,7 +4,7 @@ int verJugador ( const void* dato, void *stream )
 {
     tJugador *jugador = (tJugador*)dato;
     fprintf((FILE*)stream,"%-30s\t%-7d\n", jugador->nombre, jugador->orden);
-    return 1;
+    return 1;   ///return TODO_OK;
 }
 
 int mostrarJugarConOrdenReal( void* dato, void *stream )
@@ -35,28 +35,28 @@ int ModificarElOrdenJugador( void* n, void* d){
     int* orden=d;
     jugador->orden=*orden;
     (*orden)++;
-    return 1;
+    return 1;      ///return TODO_OK;
 }
 
 int imprimirJugador ( void* dato, void *stream )
 {
     tJugador *jugador = (tJugador*)dato;
     fprintf((FILE*)stream,"%-20.20s", jugador->nombre);
-    return 1;
+    return 1;      ///return TODO_OK;
 }
 
 int imprimirPuntajeTotalJugador ( void* dato, void *stream )
 {
     tJugador *jugador = (tJugador*)dato;
     fprintf((FILE*)stream,"%10d   ", jugador->puntajeTotal);
-    return 1;
+    return 1;      ///return TODO_OK;
 }
 
 int sumarPuntos( void* d,void* d2){
     tJugador * j = (tJugador*)d;
     int *n=d2;
     j->puntajeTotal+=*n;
-    return 1;
+    return 1;      ///return TODO_OK;
 }
 
 int obtenerMaximaPuntuacion( void* d,void* d2){
@@ -64,7 +64,7 @@ int obtenerMaximaPuntuacion( void* d,void* d2){
     int *n=d2;
     if(j->puntajeTotal>*n)
         *n=j->puntajeTotal;
-    return 1;
+    return 1;      ///return TODO_OK;
 }
 
 int imprimirGanadores(void* d,void* d2){
@@ -74,6 +74,6 @@ int imprimirGanadores(void* d,void* d2){
     if(*n==j->puntajeTotal)
         printf("%s  ",j->nombre);
 
-    return 1;
+    return 1;      ///return TODO_OK;
 }
 

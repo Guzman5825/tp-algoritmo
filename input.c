@@ -29,7 +29,7 @@ char obtenerRespuestaDeTecladoEntre(char letraMenor,char letraMayor){
 int obtenerTextoNoVacioDeTecladoYLimitado(char* TextoDestino,int limiteCaracter){
     char *p;
     if(TextoDestino==NULL)
-        return 0;
+        return 0;   ///return SIN_BUFFER;
     do{
         fflush(stdin);
         fgets( TextoDestino, limiteCaracter, stdin );
@@ -39,7 +39,7 @@ int obtenerTextoNoVacioDeTecladoYLimitado(char* TextoDestino,int limiteCaracter)
     p=strchr(TextoDestino,'\n');
     if(p!=NULL && *p=='\n')
         *p='\0';
-    return 1;
+    return 1;   ///return TODO_OK;
 }
 
 int obtenerNombreDeArchivoConFecha(char* textoDestino,unsigned tamTextoDestino){
@@ -47,5 +47,5 @@ int obtenerNombreDeArchivoConFecha(char* textoDestino,unsigned tamTextoDestino){
     struct tm *fechaHora = localtime(&tiempoTranscurrido);
     snprintf(textoDestino, tamTextoDestino, "informe-juego_%4d-%02d-%02d-%02d-%02d.txt",
              (fechaHora->tm_year + 1900), (fechaHora->tm_mon + 1), fechaHora->tm_mday, fechaHora->tm_hour, fechaHora->tm_min);
-    return 1;
+    return 1;   ///return TODO_OK;
 }

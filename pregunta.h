@@ -19,6 +19,8 @@ typedef struct
     char opcionCorrecta;
     int orden;
     tListaC respuestas;
+    ///int mejorTiempo;
+    ///int duplicadoMejorTiempo;
 }
 tPregunta;
 

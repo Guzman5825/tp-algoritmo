@@ -3,9 +3,9 @@
 void crearJuego(tJuego* juego){
     crearLista( &juego->listaPreguntas );
     crearListaC(&juego->listaJugadores);
-    juego->cantJug=0;
-    juego->nivelEligido=0;
-    juego->tiempoLimite=0;
+    juego->cantJug=0;   ///CANT_INICIAL_JUGADORES
+    juego->nivelEligido=0;  ///NIVEL_POR_DEFECTO
+    juego->tiempoLimite=0;  ///TIEMPO_POR_DEFECTO
     srand(time(NULL));
 }
 
@@ -24,7 +24,7 @@ int cargarJuego(tJuego* juego){
 
     system("cls");
     puts("\ncargando preguntas...");
-
+                                        ///URL_MOCKAPI
     if(!cargarPreguntas( &juego->listaPreguntas, "https://664d06f4ede9a2b5565273e6.mockapi.io/PREGUNTAS",
                      juego->nivelEligido, juego->cantRondas )){
         puts("ingrese cualquier tecla para continuar...");
@@ -51,6 +51,8 @@ int cargarJugadores ( tListaC* listaJugadores,size_t * cantJug )
         *cantJug = solicitarJugadores(&jugadores);
     }
 
+    ///si se habria ingresado en tListaCircular directamente, se podria evitar crear las siguiente lineas
+
     while(!listaVacia(&jugadores)){
         sacarDeListaEnPos(&jugadores,&jugador,sizeof(tJugador),0);
         jugador.orden=orden;
@@ -73,6 +75,9 @@ size_t solicitarJugadores (t_Lista *lista)
     while( strcmpi( "FIN", jugador.nombre ) != 0  )
     {
         jugador.orden = rand();
+        /**ACA SE PONDRIS INSERTAR POR POSICION EN LISTA CIRCULAR
+        insertarEnListaCircularPorPosicion(lista,&jugador,sizeof(tJugador),rand()%cantJug)
+        */
         insertarEnListaOrdenadoConDuplicado(lista, &jugador, sizeof( tJugador ),cmpJugadorXOrdenMenAMay );
         cantJug++;
         printf("Ingrese el nombre de un jugador de hasta %d caracteres o FIN si ya ingreso todos los nombres!!!!\n",MAX_CARACTERES_NOMBRE);
@@ -88,7 +93,7 @@ static size_t write_callback(void *respuesta, size_t tamDatos, size_t cantDatos,
 
     datosUsuario->cadenaJSON = realloc( datosUsuario->cadenaJSON, datosUsuario->tamCadena + tamNuevo + 1 );
     if( ! datosUsuario->cadenaJSON )
-        return 0; //no puedo agrandar la cadena
+        return 0; ///return SIN_MEM
 
     memcpy( datosUsuario->cadenaJSON + datosUsuario->tamCadena, respuesta, tamNuevo );
     datosUsuario->tamCadena += tamNuevo;
@@ -121,13 +126,14 @@ int cargarPreguntas ( t_Lista *lista, const char *urlAPI, size_t nivelDifucultad
 
     if( ! inicializarJsonTxt( &jsonRes )  ){
         puts("error de inicializcion de json");
-        return 0;//No tengo donde almacenar la respuesta
+        return 0;   /// return SIN_MEM
     }
 
 
     curl = curl_easy_init();
     if( ! curl )
-        return 0; //no se pudo inicializar una instancia de curl, no voy a poder realizar la consulta
+        return 0;  ///return ERROR_INICIALIZACION
+
     curl_easy_setopt( curl, CURLOPT_URL, urlAPI );//le decimos la ruta del api
     curl_easy_setopt( curl, CURLOPT_WRITEFUNCTION, write_callback );//como va a manejar cada paquete de datos, la funcion callback
     curl_easy_setopt( curl, CURLOPT_WRITEDATA, &jsonRes ); //lo que necesita la funcion callback
@@ -138,8 +144,8 @@ int cargarPreguntas ( t_Lista *lista, const char *urlAPI, size_t nivelDifucultad
     if( coderes != CURLE_OK )
     {
         printf( "Error al realizar la solicitud: %s\n", curl_easy_strerror( coderes ) );
-        //deberia finalizar el json de buffer
-        return 0; //por el error de la consulta
+        ///cJSON_Delete( jsonPreguntas );
+        return 0; /// return ERROR_INICIALIZACION
     }
 
     jsonPreguntas = cJSON_Parse(jsonRes.cadenaJSON);
@@ -207,7 +213,8 @@ int contestarPregunta(void* d, void* d2){
 
     obtenerRespuestaDeTecladoTemporizado(&(respuesta.respuesta),&tiempoTranscurrido,juego->tiempoLimite);
     respuesta.tiempo=(int)tiempoTranscurrido;
-
+    ///ACA MIENTRAS SE CONTESTA SE PODRIA OBTENER EL MEJOR TIEMPO PARA ESA PREGUNTA
+    ///if( respuesta.tiempo<pregunta->menorTiempo) pregunta->menorTiempo=....;...;
     printf("Su respuesta es %c y tardo %2d segundos \n",respuesta.respuesta,respuesta.tiempo);
 
     insertarEnSiguiente(&pregunta->respuestas,&respuesta,sizeof(respuesta));
@@ -343,8 +350,8 @@ int menu(){
     printf("[A] Jugar\n[B] Salir\n");
     eleccion=obtenerRespuestaDeTecladoEntre('A','B');
     if(eleccion=='B')
-        return 0;
-    return TODO_OK;
+        return 0;///return SALIR;
+    return TODO_OK; ///return CONTINUAR;
 }
 
 void generarInforme(tJuego*juego,tContexto *c,tJuego *j){

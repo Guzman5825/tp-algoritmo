@@ -41,11 +41,11 @@ int ModificarElOrdenPregunta( void* n, void* d){
     int* orden=d;
     pregunta->orden=*orden;
     (*orden)++;
-    return 1;
+    return 1;      ///return TODO_OK;
 }
 
 int vaciarRespuestas(void* d, void* d2){
     tPregunta *pregunta=d;
     vaciarListaC(&pregunta->respuestas);
-    return 1;
+    return 1;          ///return TODO_OK;
 }

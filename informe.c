@@ -3,13 +3,15 @@
 int imprimirEnArchivoPregunta(void*preg,void*pa){
     tPregunta*pregunta=(tPregunta*)preg;
     FILE *archivo = (FILE *)pa;
+    ///preguntar si existe el archivo,
+
     fprintf(archivo, "Pregunta N°%d: %s\n",pregunta->orden+1, pregunta->pregunta);
     fprintf(archivo, "Opciones:\n");
     for (int i = 0; i < MAX_OPCIONES; i++) {
         fprintf(archivo, "  Opción %d: %s\n", i + 1, pregunta->opciones[i]);
     }
     fprintf(archivo, "Respuesta Correcta: %c\n", pregunta->opcionCorrecta);
-    return 1;
+    return 1;   ///return TODO_OK
 }
 
 int puntosPorPreguntaParaArchivo(void*preg,void*pa){
@@ -17,7 +19,7 @@ int puntosPorPreguntaParaArchivo(void*preg,void*pa){
     tContexto *c=pa;
     fprintf(c->archivo, "Respuesta de la pregunta N°%d:\n", pregunta->orden+1);
     mapListaC(&pregunta->respuestas,imprimirPuntosPorPreguntaEnArchivo,pa);
-    return 1;
+    return 1;   ///return TODO_OK;
 }
 
 int imprimirPuntosPorPreguntaEnArchivo(void*elem,void*pa){
@@ -33,14 +35,14 @@ int imprimirPuntosPorPreguntaEnArchivo(void*elem,void*pa){
     fprintf(c->archivo, "  resp:'%c'", resp->respuesta);
     fprintf(c->archivo, "  tiempo:%3ds", resp->tiempo);
     fprintf(c->archivo, "  puntos:%1d\n", resp->puntaje);
-    return 1;
+    return 1;   ///return TODO_OK;
 }
 
 int imprimirJugadorEnArchivo(void *jug, void *pa) {
     tJugador *jugador = (tJugador *)jug;
     FILE *archivo = (FILE *)pa;
     fprintf(archivo, "Puntaje total %d del jugador: %s\n", jugador->puntajeTotal,jugador->nombre);
-    return 1;
+    return 1;   ///return TODO_OK;
 }
 
 void ganadoresEnArchivo(tListaC*lista,FILE*pa,int puntajeMaximo){

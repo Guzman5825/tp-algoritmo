@@ -26,6 +26,6 @@ int insertarEnSiguiente( tListaC *lista, const void *elem, size_t tamElem);
 void mapListaC(tListaC *lista, Accion2 acc, void *datoAccion );
 int buscarPorClaveYaccionarEnListaC( tListaC *lista, const void *elem, size_t tamElem, Cmp cmp, void *datosAccion, Accion2 acc );
 void vaciarListaC ( tListaC *lc );
-
+///ingresarPorPosicionEnlistaC();
 
 #endif // LISTACIRCULAR_H_INCLUDED
