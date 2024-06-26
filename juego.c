@@ -243,11 +243,13 @@ int juegaJugador(void* d, void* d2){
     return TODO_OK;
 }
 
+   ///simplemente si se habria hecho una primitiva
 int ordenarPosiciones(void* d, void* d2){
     tPregunta *pregunta=d;
     tRespuesta resp;
     resp.ordenJugador=0;
     buscarPorClaveYaccionarEnListaC(&pregunta->respuestas,&resp,sizeof(tRespuesta),cmpOrdenJugador,NULL,NULL);
+    ///apuntarSiguienteEnListaC(&pregunta->respuestas);   ///esto habria el codigo anterior
     return TODO_OK;
 }
 
@@ -307,7 +309,7 @@ int calcularPuntajesDeTodasRespuestas(void* d, void* d2){
     c->respuestaCorrecta=pregunta->opcionCorrecta;
     c->mejorTiempo=INT_MAX;
 
-    mapListaC(&pregunta->respuestas,mejorTiempoValido,c);
+    mapListaC(&pregunta->respuestas,mejorTiempoValido,c);   /// esto si se habria calculado antes durante las preguntas, se podria haber evitado
     mapListaC(&pregunta->respuestas,calcularPuntajeDeRespuesta,c);
 
     return TODO_OK;
@@ -364,6 +366,7 @@ void generarInforme(tJuego*juego,tContexto *c,tJuego *j){
     }
     c->archivo=pa;
 
+    ///en vez llamar varias veces a la funcion , se podria hacer un texto largo con las variables
     fprintf(pa,"condiciones del juego:\n");
     fprintf(pa,"-cantidad de jugadores:%d\n",(int)j->cantJug);
     fprintf(pa,"-cantidad de preguntas:%d\n",(int)j->cantRondas);
@@ -373,7 +376,7 @@ void generarInforme(tJuego*juego,tContexto *c,tJuego *j){
     fprintf(pa,"-tiempo limite por pregunta: %d segundos\n",j->tiempoLimite);
 
     fprintf(pa,"\nPreguntas:\n");
-    mapLista(&juego->listaPreguntas,imprimirEnArchivoPregunta,pa);
+    mapLista(&juego->listaPreguntas,imprimirEnArchivoPregunta,pa);  ///las preguntas y respuestas se podrian imprimir todo a ala vez
     fprintf(pa,"\nRespuestas Jugadores:\n");
     mapLista(&juego->listaPreguntas,puntosPorPreguntaParaArchivo,c);
     fprintf(pa,"\nPuntajes Totales de cada Jugador:\n");
